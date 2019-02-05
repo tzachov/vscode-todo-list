@@ -1,0 +1,174 @@
+{
+  "name": "todo-list",
+  "version": "1.0.0",
+  "description": "List all action comments (TODO, FIXME, HACK etc) in an easy-to-read list",
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "author": "Tzach Ovadia",
+  "license": "ISC",
+  "publisher": "TzachOvadia",
+  "icon": "icons/main_icon.png",
+  "galleryBanner": {
+    "color": "#0072be",
+    "theme": "light"
+  },
+  "engines": {
+    "vscode": "^1.25.0"
+  },
+  "enableProposedApi": true,
+  "categories": [
+    "Other",
+    "Extension Packs"
+  ],
+  "preview": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tzachov/frontendext"
+  },
+  "activationEvents": [
+    "workspaceContains:.angular-cli.json",
+    "workspaceContains:angular-cli.json",
+    "workspaceContains:angular.json"
+  ],
+  "main": "./out/src/extension",
+  "devDependencies": {
+    "typescript": "^2.0.3",
+    "vscode": "^1.1.18",
+    "@types/node": "*"
+  },
+  "contributes": {
+    "commands": [{
+      "command": "extension.collapseAll",
+      "title": "Collapse All",
+      "category": "TODO List",
+      "icon": {
+        "dark": "icons/dark/collapse-all.svg",
+        "light": "icons/light/collapse-all.svg"
+      }
+    }, {
+      "command": "extension.refreshActionComments",
+      "title": "Refresh List",
+      "category": "TODO List",
+      "icon": {
+        "dark": "icons/dark/refresh.svg",
+        "light": "icons/light/refresh.svg"
+      }
+    }, {
+      "command": "extension.removeActionComment",
+      "title": "Remove",
+      "category": "TODO List",
+      "icon": {
+        "dark": "icons/dark/close.svg",
+        "light": "icons/light/close.svg"
+      }
+    }, {
+      "command": "extension.viewComment",
+      "title": "View Comment",
+      "category": "TODO List"
+    }, {
+      "command": "extension.editComment",
+      "title": "Edit",
+      "category": "TODO List"
+    }, {
+      "command": "extension.insertComment",
+      "title": "Insert Comment",
+      "category": "TODO List"
+    }],
+    "menus": {
+      "commandPalette": [{
+          "command": "extension.collapseAll",
+          "when": "false"
+        },
+        {
+          "command": "extension.refreshActionComments"
+        },
+        {
+          "command": "extension.removeActionComment",
+          "when": "false"
+        },
+        {
+          "command": "extension.viewComment",
+          "when": "false"
+        },
+        {
+          "command": "extension.editComment",
+          "when": "false"
+        },
+        {
+          "command": "extension.insertComment",
+          "when": "resourceLangId =~ /typescript|javascript/"
+        }
+      ],
+      "view/item/context": [{
+          "command": "extension.removeActionComment",
+          "when": "view == actionComments && viewItem != $GROUP",
+          "group": "inline"
+        },
+        {
+          "command": "extension.viewComment",
+          "when": "view == actionComments && viewItem != $GROUP",
+          "group": "3_open"
+        },
+        {
+          "command": "extension.removeActionComment",
+          "when": "view == actionComments && viewItem != $GROUP",
+          "group": "7_modification"
+        },
+        {
+          "command": "extension.editComment",
+          "when": "view == actionComments && viewItem != $GROUP",
+          "group": "1_modification"
+        }
+      ],
+      "view/title": [{
+        "command": "extension.refreshActionComments",
+        "when": "view == actionComments",
+        "group": "navigation"
+      }, {
+        "command": "extension.collapseAll",
+        "when": "view == actionComments",
+        "group": "navigation"
+      }]
+    },
+    "keybindings": [{
+      "command": "extension.insertComment",
+      "key": "ctrl+shift+t",
+      "when": "resourceLangId =~ /typescript|javascript/"
+    }],
+    "views": {
+      "explorer": [{
+        "id": "actionComments",
+        "name": "Action Comments"
+      }]
+    },
+    "configuration": {
+      "title": "TODO List",
+      "properties": {
+        "expression": {
+          "type": "string",
+          "default": "(?:\\/\\/|\\/\\*)[ ]?(?<type>[A-Z]+)(?:\\:|\\((?<name>[A-Za-z\\/\\d ]+)\\)\\:)[ ]?(?<text>.*)",
+          "markdownDescription": "RegExp to use for extracting comments (Must have `type` and `text` groups)\nWe recommend capturing only all-uppercase types to avoid capturing `tslint:` and commented properties"
+        },
+        "scanOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Scan comments when saving a file"
+        },
+        "exclude": {
+          "type": "string",
+          "default": "{**/node_modules/**,**/bower_components/**,**/dist/**,**/build/**,**/.vscode/**,**/_output/**,**/*.min.*,**/*.map}",
+          "description": "Glob pattern to exclude from scans"
+        },
+        "name": {
+          "type": "string",
+          "default": null,
+          "markdownDescription": "Name to use as `Created by`"
+        }
+      }
+    }
+  }
+}

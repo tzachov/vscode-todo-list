@@ -2,15 +2,24 @@
 
 This VSCode extension will list all of your TODO-type comments in an easy-to-read tree view panel.
 
+It will also enable you to insert, edit and remove comments.
+
 ## Installation
 ```
 ext install todo-list
 ```
 
 ## How It Works
-- List is updated every time you save a document.
+Once installed, you'll see a list of `Action Comments` in `Explorer` view.
+
+The list is updated every time you save a document (configurable)
+
+List Actions:
 - Click an item to open.
 - Click `Remove` to delete the comment from document.
+- `Right-Click -> Edit` to edit selected comment.
+
+Press `Ctrl+Shift+T` to insert a comment in current cursor position.
 
 ## Supported Comments
 TODO List supports any comment written in the next formats:
@@ -58,3 +67,6 @@ Common tags/types:
   Name to use as `Created by`.
 
   Default: `empty`
+
+  ## Supported Languages
+  This extension currently supports `Javascript` and `Typescript`. We'll add support for other languages in the near future.

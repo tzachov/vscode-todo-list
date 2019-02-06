@@ -7,15 +7,16 @@ import { registerTreeViewProvider } from './functions/register-tree';
 import { generateComment } from './functions/generate-comment';
 import { editComment } from './functions/edit-comment';
 import { insertComment } from './functions/insert-comment';
+import { Trello } from './trello';
 
 export function activate(context: vscode.ExtensionContext) {
     try {
-        const config: Config = {
-            expression: new RegExp(vscode.workspace.getConfiguration().get('expression'), 'g'),
-            exclude: vscode.workspace.getConfiguration().get('exclude'),
-            scanOnSave: vscode.workspace.getConfiguration().get('scanOnSave'),
-            name: vscode.workspace.getConfiguration().get('name')
-        }
+
+        let config = getConfig();
+        vscode.workspace.onDidChangeConfiguration(e => {
+            config = getConfig();
+        });
+
         registerTreeViewProvider(config);
 
         vscode.commands.registerCommand('extension.editComment', async (item: ActionComment) => {
@@ -36,12 +37,31 @@ export function activate(context: vscode.ExtensionContext) {
             }
             insertComment(item);
         });
+
+        new Trello(config).init();
+
+
     } catch (e) {
         vscode.window.showErrorMessage('Could not activate TODO List (' + e.message + ')');
     }
 }
 
 export function deactivate() {
+}
+
+function getConfig() {
+    const config: Config = {
+        expression: new RegExp(vscode.workspace.getConfiguration().get('expression'), 'g'),
+        exclude: vscode.workspace.getConfiguration().get('exclude'),
+        scanOnSave: vscode.workspace.getConfiguration().get('scanOnSave'),
+        name: vscode.workspace.getConfiguration().get('name'),
+        trello: {
+            token: vscode.workspace.getConfiguration('trello').get('token'),
+            defaultList: vscode.workspace.getConfiguration('trello').get('defaultList')
+        }
+    };
+
+    return config;
 }
 
 async function getUserInputs(config: Config, item?: ActionComment) {

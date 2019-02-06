@@ -1,7 +1,7 @@
 {
   "name": "todo-list",
   "displayName": "TODO List",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "List all action comments (TODO, FIXME, HACK etc) in an easy-to-read list",
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
@@ -35,7 +35,8 @@
   "devDependencies": {
     "typescript": "^2.0.3",
     "vscode": "^1.1.18",
-    "@types/node": "*"
+    "@types/node": "*",
+    "tslib": "^1.9.3"
   },
   "dependencies": {
     "fs": "^0.0.2",
@@ -83,6 +84,11 @@
         "command": "extension.insertComment",
         "title": "Insert Comment",
         "category": "TODO List"
+      },
+      {
+        "command": "extension.createTrelloCard",
+        "title": "Create Trello Card",
+        "category": "TODO List"
       }
     ],
     "menus": {
@@ -129,6 +135,11 @@
           "command": "extension.editComment",
           "when": "view == actionComments && viewItem != $GROUP",
           "group": "1_modification"
+        },
+        {
+          "command": "extension.createTrelloCard",
+          "when": "view == actionComments && viewItem != $GROUP",
+          "group": "z_commands"
         }
       ],
       "view/title": [{
@@ -170,6 +181,16 @@
           "type": "string",
           "default": null,
           "markdownDescription": "Name to use as `Created by`"
+        },
+        "trello.token": {
+          "type": "string",
+          "default": null,
+          "markdownDescription": "In order to create Trello cards, this extension requires read and write permissions.\n\n[Click here to generate token](https://trello.com/1/authorize?name=TODO%20List&scope=read,write&expiration=never&response_type=token&key=a20752c7ff035d5001ce2938f298be64)."
+        },
+        "trello.defaultList": {
+          "type": "string",
+          "default": null,
+          "description": "List ID to create cards in (will be automatically set on first use)"
         }
       }
     }

@@ -3,4 +3,10 @@ export interface Config {
     exclude: string;
     scanOnSave: boolean;
     name?: string;
+    trello: TrelloConfig;
+}
+
+export interface TrelloConfig {
+    token?: string;
+    defaultList?: string;
 }

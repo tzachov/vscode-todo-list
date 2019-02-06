@@ -65,3 +65,13 @@ Common tags/types:
 
   ## Supported Languages
   This extension currently supports `Javascript` and `Typescript`. We'll add support for other languages in the near future.
+
+- **Trello:Token**
+
+  In order to create Trello cards, this extension requires read and write permissions.
+  
+  [Click here to generate token](https://trello.com/1/authorize?name=TODO%20List&scope=read,write&expiration=never&response_type=token&key=a20752c7ff035d5001ce2938f298be64).
+
+- **Trello:Default List**
+
+  List ID to create cards in (will be automatically set on first use)

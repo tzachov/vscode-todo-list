@@ -35,8 +35,8 @@ export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<Ac
         }
 
         if (!!this.comments) {
-            const { items } = createTree(this.comments);
-            return items;
+            const tree = createTree(this.comments);
+            return tree.items;
         }
 
         return [];
@@ -60,12 +60,12 @@ export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<Ac
                 this.comments = await readComments(this.config);
             }
 
-            const { actions, items } = createTree(this.comments);
-            this.tree = actions;
+            const tree = createTree(this.comments);
+            this.tree = tree.actions;
             if (emitChange) {
                 this._onDidChangeTreeData.fire();
             }
-            return Promise.resolve(items);
+            return Promise.resolve(tree.items);
         } catch (e) {
             return Promise.reject(e);
         }

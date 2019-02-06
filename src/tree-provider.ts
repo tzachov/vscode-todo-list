@@ -16,11 +16,6 @@ export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<Ac
     readonly onDidChangeTreeData: vscode.Event<ActionComment> = this._onDidChangeTreeData.event;
 
     constructor(private config: Config) {
-        vscode.commands.registerCommand('extension.openFile', (uri, position) => openResource(uri, position));
-        vscode.commands.registerCommand('extension.viewComment', (item: ActionComment) => openResource(item.uri, item.position));
-        vscode.commands.registerCommand('extension.refreshActionComments', () => this.refresh(true));
-        vscode.commands.registerCommand('extension.removeActionComment', (item: ActionComment) => this.removeItem(item.uri, item.position, item.length));
-        vscode.commands.registerCommand('extension.collapseAll', () => this.collapseAll());
         vscode.workspace.onDidSaveTextDocument((document: vscode.TextDocument) => {
             if (config.scanOnSave) {
                 this.refresh(true, document.uri);
@@ -51,7 +46,7 @@ export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<Ac
         return null;
     }
 
-    private async refresh(emitChange?: boolean, file?: vscode.Uri) {
+    async refresh(emitChange?: boolean, file?: vscode.Uri) {
         try {
             if (file) {
                 const fileComments = readCommentsInFile(this.config.expression, file);
@@ -76,12 +71,12 @@ export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<Ac
         }
     }
 
-    private async removeItem(resource: vscode.Uri, start: number, length: number) {
+    async removeItem(resource: vscode.Uri, start: number, length: number) {
         await removeComment(resource, start, length);
         this.refresh(true, resource);
     }
 
-    private collapseAll() {
+    collapseAll() {
         // TODO: implement
         this.refresh(false);
     }

@@ -4,11 +4,6 @@ This VSCode extension will list all of your TODO-type comments in an easy-to-rea
 
 It will also enable you to insert, edit and remove comments.
 
-## Installation
-```
-ext install todo-list
-```
-
 ## How It Works
 Once installed, you'll see a list of `Action Comments` in `Explorer` view.
 
@@ -46,9 +41,9 @@ Common tags/types:
 
 - **Expression**
 
-  RegExp to use for extracting comments (Must have `type` and `text` groups). We recommend capturing only all-uppercase types to avoid capturing `tslint:` and commented properties.
+  RegExp to use for extracting comments (first group must be type, last must be text). We recommend capturing only all-uppercase types to avoid capturing `tslint:` and commented properties.
 
-  Default: ```(?:\\/\\/|\\/\\*)[ ]?(?<type>[A-Z]+)(?:\\:|\\((?<name>[A-Za-z\\/\\d ]+)\\)\\:)[ ]?(?<text>.*)```
+  Default: ```(?:\/\/|\/\*)[ ]?([A-Z]+)(?:\:|\(([A-Za-z\/\d ]+)\)\:)[ ]?(.*)```
 
 - **Scan On Save**
 
@@ -60,7 +55,7 @@ Common tags/types:
 
   Glob pattern to exclude from scans.
 
-  Default: ```**/{node_modules,dist,build}/**```
+  Default: ```{**/node_modules/**,**/bower_components/**,**/dist/**,**/build/**,**/.vscode/**,**/_output/**,**/*.min.*,**/*.map}```
 
 - **Name**
 

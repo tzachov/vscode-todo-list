@@ -9,32 +9,39 @@ import { editComment } from './functions/edit-comment';
 import { insertComment } from './functions/insert-comment';
 
 export function activate(context: vscode.ExtensionContext) {
-    const config: Config = {
-        expression: new RegExp(vscode.workspace.getConfiguration().get('expression'), 'g'),
-        exclude: vscode.workspace.getConfiguration().get('exclude'),
-        scanOnSave: vscode.workspace.getConfiguration().get('scanOnSave'),
-        name: vscode.workspace.getConfiguration().get('name')
+    try {
+        const config: Config = {
+            expression: new RegExp(vscode.workspace.getConfiguration().get('expression'), 'g'),
+            exclude: vscode.workspace.getConfiguration().get('exclude'),
+            scanOnSave: vscode.workspace.getConfiguration().get('scanOnSave'),
+            name: vscode.workspace.getConfiguration().get('name')
+        }
+        registerTreeViewProvider(config);
+
+        vscode.commands.registerCommand('extension.editComment', async (item: ActionComment) => {
+            item = await getUserInputs(config, item);
+
+            if (!item) {
+                return;
+            }
+
+            const newComment = generateComment(item);
+            editComment(item, newComment);
+        });
+
+        vscode.commands.registerCommand('extension.insertComment', async (...args) => {
+            const item = await getUserInputs(config);
+            if (!item) {
+                return;
+            }
+            insertComment(item);
+        });
+    } catch (e) {
+        vscode.window.showErrorMessage('Could not activate TODO List (' + e.message + ')');
     }
-    registerTreeViewProvider(config);
+}
 
-    vscode.commands.registerCommand('extension.editComment', async (item: ActionComment) => {
-        item = await getUserInputs(config, item);
-
-        if (!item) {
-            return;
-        }
-
-        const newComment = generateComment(item);
-        editComment(item, newComment);
-    });
-
-    vscode.commands.registerCommand('extension.insertComment', async (...args) => {
-        const item = await getUserInputs(config);
-        if (!item) {
-            return;
-        }
-        insertComment(item);
-    });
+export function deactivate() {
 }
 
 async function getUserInputs(config: Config, item?: ActionComment) {

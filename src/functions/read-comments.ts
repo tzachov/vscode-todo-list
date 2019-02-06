@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { readFileSync, fstatSync } from 'fs';
+import { readFileSync } from 'fs';
 
 import { ActionCommentCollection } from "../models/action-comment-collection";
 import { ActionComment } from '../models/action-comment';
@@ -30,7 +30,14 @@ export function readCommentsInFile(expression: RegExp, file: vscode.Uri) {
     let res: RegExpExecArray;
     const currentFileActions: Array<ActionComment> = [];
     while (res = expression.exec(fileContent)) {
-        const groups = res['groups'];
+        const groups = {
+            type: res[1],
+            name: res[2],
+            text: res[res.length - 1]
+        };
+        if (res.length < 4) {
+            groups.name = null;
+        }
         const label = groups.text.replace(/[ ]?\*\/$/, '');
         const commentType = groups.type.toUpperCase();
         const comment: ActionComment = new ActionComment(label);

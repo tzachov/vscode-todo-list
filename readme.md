@@ -63,9 +63,6 @@ Common tags/types:
 
   Default: `empty`
 
-  ## Supported Languages
-  This extension currently supports `Javascript` and `Typescript`. We'll add support for other languages in the near future.
-
 - **Trello:Token**
 
   In order to create Trello cards, this extension requires read and write permissions.
@@ -75,3 +72,6 @@ Common tags/types:
 - **Trello:Default List**
 
   List ID to create cards in (will be automatically set on first use)
+
+## Supported Languages
+This extension currently supports `Javascript` and `Typescript`. We'll add support for other languages in the near future.

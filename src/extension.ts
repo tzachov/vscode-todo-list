@@ -1,86 +1,51 @@
 'use strict';
 import * as vscode from 'vscode';
 
-import { Config } from './config';
-import { ActionComment } from './models/action-comment';
+import { Config, TrelloConfig } from './config';
 import { registerTreeViewProvider } from './functions/register-tree';
-import { generateComment } from './functions/generate-comment';
-import { editComment } from './functions/edit-comment';
-import { insertComment } from './functions/insert-comment';
 import { Trello } from './trello';
+import { TodoUriHandler } from './uri-handler';
+import { Modifications } from './modifications';
 
 export function activate(context: vscode.ExtensionContext) {
     try {
-
         let config = getConfig();
-        vscode.workspace.onDidChangeConfiguration(e => {
+
+        registerTreeViewProvider(context, config);
+
+        context.subscriptions.push(vscode.window.registerUriHandler(new TodoUriHandler()));
+
+        const trello = new Trello(context, config);
+        const modifications = new Modifications(context, config);
+
+        context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
             config = getConfig();
-        });
-
-        registerTreeViewProvider(config);
-
-        vscode.commands.registerCommand('extension.editComment', async (item: ActionComment) => {
-            item = await getUserInputs(config, item);
-
-            if (!item) {
-                return;
+            if (e.affectsConfiguration('trello')) {
+                trello.updateConfiguration(config);
             }
-
-            const newComment = generateComment(item);
-            editComment(item, newComment);
-        });
-
-        vscode.commands.registerCommand('extension.insertComment', async (...args) => {
-            const item = await getUserInputs(config);
-            if (!item) {
-                return;
+            if (e.affectsConfiguration('name')) {
+                modifications.updateConfiguration(config);
             }
-            insertComment(item);
-        });
-
-        new Trello(config).init();
-
-
+        }));
     } catch (e) {
         vscode.window.showErrorMessage('Could not activate TODO List (' + e.message + ')');
     }
 }
 
 export function deactivate() {
+
 }
 
 function getConfig() {
+    const appScheme = vscode.version.indexOf('insider') > -1 ? 'vscode-insiders' : 'vscode'
     const config: Config = {
         expression: new RegExp(vscode.workspace.getConfiguration().get('expression'), 'g'),
         exclude: vscode.workspace.getConfiguration().get('exclude'),
         scanOnSave: vscode.workspace.getConfiguration().get('scanOnSave'),
         name: vscode.workspace.getConfiguration().get('name'),
-        trello: {
-            token: vscode.workspace.getConfiguration('trello').get('token'),
-            defaultList: vscode.workspace.getConfiguration('trello').get('defaultList')
-        }
+        trello: vscode.workspace.getConfiguration().get<TrelloConfig>('trello'),
+        scheme: appScheme
     };
 
     return config;
-}
-
-async function getUserInputs(config: Config, item?: ActionComment) {
-    item = item || new ActionComment(null);
-    const data = [
-        { prompt: 'Comment type', value: item && item.commentType, key: 'commentType' },
-        { prompt: 'Text', value: item && item.label, key: 'label' },
-        { prompt: 'Created by', value: (item && item.createdBy) || config.name, key: 'createdBy' }
-    ];
-
-    for (let i = 0; i < data.length; i++) {
-        const input = data[i];
-        const newValue = await vscode.window.showInputBox({ prompt: input.prompt, value: input.value });
-        if (newValue === undefined) {
-            return;
-        }
-
-        item[input.key] = newValue;
-    }
-
-    return item;
 }

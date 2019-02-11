@@ -1,15 +1,19 @@
 import * as vscode from 'vscode';
 import * as https from 'https';
 import * as http from 'http';
+const clipboardy = require('clipboardy');
+
 import { Config } from './config';
 import { ActionComment } from './models/action-comment';
 
 export class Trello {
 
-    constructor(private config: Config) { }
+    constructor(context: vscode.ExtensionContext, private config: Config) {
+        context.subscriptions.push(vscode.commands.registerCommand('extension.createTrelloCard', this.createTrelloCard.bind(this)));
+    }
 
-    init() {
-        vscode.commands.registerCommand('extension.createTrelloCard', this.createTrelloCard.bind(this));
+    updateConfiguration(config: Config) {
+        this.config = config;
     }
 
     async createTrelloCard(item: ActionComment) {
@@ -18,9 +22,14 @@ export class Trello {
         let listId = this.config.trello.defaultList;
 
         if (!token) {
-            token = await vscode.window.showInputBox({ prompt: 'Trello Token', ignoreFocusOut: true });
-            vscode.workspace.getConfiguration('trello').update('token', token);
+            try {
+                token = await this.getToken(key);
+                vscode.workspace.getConfiguration('trello').update('token', token);
+            } catch (e) {
+                return;
+            }
         }
+
         if (!listId) {
             const list = await this.selectTrelloList(key, token);
             if (!list) {
@@ -32,9 +41,8 @@ export class Trello {
         }
 
         const name = `${item.commentType}: ${item.label}`;
-        const desc = `${item.uri.fsPath}`;
+        const desc = `[View File](${this.config.scheme}://TzachOvadia.todo-list/view?file=${encodeURIComponent(item.uri.fsPath)}#${item.position})`;
         const addCardResult = await this.addTrelloCard(listId, name, desc, key, token);
-        console.log('addCardResult', addCardResult);
     }
 
     async selectTrelloList(key: string, token: string) {
@@ -61,6 +69,36 @@ export class Trello {
             console.error(e);
             return;
         }
+    }
+
+    private getToken(key: string) {
+        return new Promise<string>(async (resolve, reject) => {
+            let token = await vscode.window.showInputBox({ prompt: 'Trello Token', ignoreFocusOut: true });
+            if (!!token) {
+                return resolve(token);
+            }
+
+            const genToken = await vscode.window.showInformationMessage<vscode.MessageItem>(
+                'Trello token is required in order to create new cards.\n\nClick `Generate` to open authorization page.',
+                { modal: false },
+                { title: 'Generate' });
+            if (!genToken) {
+                return reject();
+            }
+            const listener = vscode.window.onDidChangeWindowState(async e => {
+                if (e.focused) {
+                    const value = await clipboardy.read();
+                    token = await vscode.window.showInputBox({ prompt: 'Trello Token', ignoreFocusOut: true, value: value });
+
+                    listener.dispose();
+                    if (!!token) {
+                        return resolve(token);
+                    }
+                }
+            });
+
+            await vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://trello.com/1/authorize?name=TODO%20List&scope=read,write&expiration=never&response_type=token&key=${key}`));
+        });
     }
 
     private getTrelloBoards(key: string, token: string): Promise<any[]> {

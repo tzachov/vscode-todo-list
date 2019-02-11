@@ -1,7 +1,7 @@
 {
   "name": "todo-list",
   "displayName": "TODO List",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "List all action comments (TODO, FIXME, HACK etc) in an easy-to-read list",
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
@@ -17,8 +17,9 @@
     "theme": "light"
   },
   "engines": {
-    "vscode": "^1.25.0"
+    "vscode": "^1.26.0"
   },
+  "enableProposedApi": true,
   "categories": [
     "Other",
     "Extension Packs"
@@ -26,7 +27,7 @@
   "activationEvents": [
     "*"
   ],
-  "preview": true,
+  "preview": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/tzachov/vscode-todo-list"
@@ -34,16 +35,18 @@
   "main": "./out/src/extension",
   "devDependencies": {
     "typescript": "^2.0.3",
-    "vscode": "^1.1.18",
+    "vscode": "^1.1.29",
     "@types/node": "*",
     "tslib": "^1.9.3"
   },
   "dependencies": {
     "fs": "^0.0.2",
-    "path": "0.12.7"
+    "path": "0.12.7",
+    "clipboardy": "^1.2.3"
   },
   "contributes": {
-    "commands": [{
+    "commands": [
+      {
         "command": "extension.collapseAll",
         "title": "Collapse All",
         "category": "TODO List",
@@ -89,10 +92,16 @@
         "command": "extension.createTrelloCard",
         "title": "Create Trello Card",
         "category": "TODO List"
+      },
+      {
+        "command": "extension.copyComment",
+        "title": "Copy",
+        "category": "TODO List"
       }
     ],
     "menus": {
-      "commandPalette": [{
+      "commandPalette": [
+        {
           "command": "extension.collapseAll",
           "when": "false"
         },
@@ -112,11 +121,16 @@
           "when": "false"
         },
         {
+          "command": "extension.copyComment",
+          "when": "false"
+        },
+        {
           "command": "extension.insertComment",
           "when": "resourceLangId =~ /typescript|javascript/"
         }
       ],
-      "view/item/context": [{
+      "view/item/context": [
+        {
           "command": "extension.removeActionComment",
           "when": "view == actionComments && viewItem != $GROUP",
           "group": "inline"
@@ -134,7 +148,12 @@
         {
           "command": "extension.editComment",
           "when": "view == actionComments && viewItem != $GROUP",
-          "group": "1_modification"
+          "group": "9_cutcopypaste"
+        },
+        {
+          "command": "extension.copyComment",
+          "when": "view == actionComments && viewItem != $GROUP",
+          "group": "9_cutcopypaste"
         },
         {
           "command": "extension.createTrelloCard",
@@ -142,22 +161,28 @@
           "group": "z_commands"
         }
       ],
-      "view/title": [{
-        "command": "extension.refreshActionComments",
-        "when": "view == actionComments",
-        "group": "navigation"
-      }]
+      "view/title": [
+        {
+          "command": "extension.refreshActionComments",
+          "when": "view == actionComments",
+          "group": "navigation"
+        }
+      ]
     },
-    "keybindings": [{
-      "command": "extension.insertComment",
-      "key": "ctrl+shift+t",
-      "when": "resourceLangId =~ /typescript|javascript/"
-    }],
+    "keybindings": [
+      {
+        "command": "extension.insertComment",
+        "key": "ctrl+shift+t",
+        "when": "resourceLangId =~ /typescript|javascript/"
+      }
+    ],
     "views": {
-      "explorer": [{
-        "id": "actionComments",
-        "name": "Action Comments"
-      }]
+      "explorer": [
+        {
+          "id": "actionComments",
+          "name": "Action Comments"
+        }
+      ]
     },
     "configuration": {
       "title": "TODO List",

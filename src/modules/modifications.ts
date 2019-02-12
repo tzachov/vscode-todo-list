@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 const clipboardy = require('clipboardy');
 
-import { Config } from './config';
-import { ActionComment } from './models/action-comment';
-import { generateComment } from './functions/generate-comment';
-import { editComment } from './functions/edit-comment';
-import { insertComment } from './functions/insert-comment';
+import { Config } from '../config';
+import { ActionComment } from '../models/action-comment';
+import { generateComment } from '../functions/generate-comment';
+import { editComment } from '../functions/edit-comment';
+import { insertComment } from '../functions/insert-comment';
 
 export class Modifications {
 

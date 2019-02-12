@@ -5,7 +5,6 @@ import { ActionComment } from './models/action-comment';
 import { ActionCommentCollection } from './models/action-comment-collection';
 import { readComments, readCommentsInFile } from './functions/read-comments';
 import { removeComment } from './functions/remove-comment';
-import { openResource } from './functions/open-resource';
 import { createTree } from './functions/create-tree';
 
 export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<ActionComment> {

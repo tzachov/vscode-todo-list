@@ -1,7 +1,7 @@
 {
   "name": "todo-list",
   "displayName": "TODO List",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "List all action comments (TODO, FIXME, HACK etc) in an easy-to-read list",
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
@@ -13,7 +13,7 @@
   "publisher": "TzachOvadia",
   "icon": "icons/icon.png",
   "galleryBanner": {
-    "color": "#0072be",
+    "color": "#c3cdd4",
     "theme": "light"
   },
   "engines": {
@@ -22,8 +22,9 @@
   "enableProposedApi": true,
   "categories": [
     "Other",
-    "Extension Packs"
+    "Formatters"
   ],
+  "keywords": ["todo", "hack", "fixme", "list", "trello", "comment", "tree", "view", "task", "highlight", "format"],
   "activationEvents": [
     "*"
   ],
@@ -96,6 +97,11 @@
       {
         "command": "extension.copyComment",
         "title": "Copy",
+        "category": "TODO List"
+      },
+      {
+        "command": "extension.convertToComment",
+        "title": "Convert to comment",
         "category": "TODO List"
       }
     ],
@@ -206,6 +212,11 @@
           "type": "string",
           "default": null,
           "markdownDescription": "Name to use as `Created by`"
+        },
+        "enableCommentFormatting": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable comment formatting (Set color for comment type and make text italic)"
         },
         "trello.token": {
           "type": "string",

@@ -3,9 +3,10 @@ import * as vscode from 'vscode';
 
 import { Config, TrelloConfig } from './config';
 import { registerTreeViewProvider } from './functions/register-tree';
-import { Trello } from './trello';
-import { TodoUriHandler } from './uri-handler';
-import { Modifications } from './modifications';
+import { TodoUriHandler } from './modules/uri-handler';
+import { Trello } from './modules/trello';
+import { Modifications } from './modules/modifications';
+import { Deocrator } from './modules/decorator';
 
 export function activate(context: vscode.ExtensionContext) {
     try {
@@ -17,6 +18,34 @@ export function activate(context: vscode.ExtensionContext) {
 
         const trello = new Trello(context, config);
         const modifications = new Modifications(context, config);
+        const decorator = new Deocrator(context, config);
+
+        const fixProvider: vscode.CodeActionProvider = {
+            provideCodeActions: function (document, range, context, token) {
+                return [{ kind: vscode.CodeActionKind.RefactorRewrite, title: 'Tag `TODO`', command: 'extension.convertToComment', arguments: [document, range, 'todo'] }];
+            }
+        };
+        vscode.commands.registerCommand('extension.convertToComment', (document: vscode.TextDocument, range: vscode.Range, commentType: string) => {
+            const selectedText = document.getText(range);
+            console.log(selectedText);
+            let res;
+            let comment;
+            while (res = config.expression.exec(selectedText)) {
+                const groups = {
+                    type: res[1],
+                    name: res[2],
+                    text: res[res.length - 1]
+                };
+                if (res.length < 4) {
+                    groups.name = null;
+                }
+
+                comment = { ...groups };
+            }
+            console.log(comment);
+        });
+        const fixer = vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: 'typescript' }, fixProvider);
+        context.subscriptions.push(fixer);
 
         context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
             config = getConfig();
@@ -25,6 +54,9 @@ export function activate(context: vscode.ExtensionContext) {
             }
             if (e.affectsConfiguration('name')) {
                 modifications.updateConfiguration(config);
+            }
+            if (e.affectsConfiguration('expression') || e.affectsConfiguration('enableCommentFormatting')) {
+                decorator.updateConfiguration(config);
             }
         }));
     } catch (e) {
@@ -44,7 +76,8 @@ function getConfig() {
         scanOnSave: vscode.workspace.getConfiguration().get('scanOnSave'),
         name: vscode.workspace.getConfiguration().get('name'),
         trello: vscode.workspace.getConfiguration().get<TrelloConfig>('trello'),
-        scheme: appScheme
+        scheme: appScheme,
+        enableCommentFormatting: vscode.workspace.getConfiguration().get('enableCommentFormatting'),
     };
 
     return config;

@@ -3,20 +3,26 @@ import * as https from 'https';
 import * as http from 'http';
 const clipboardy = require('clipboardy');
 
-import { Config } from './config';
-import { ActionComment } from './models/action-comment';
+import { Config } from '../config';
+import { ActionComment } from '../models/action-comment';
 
 export class Trello {
 
     constructor(context: vscode.ExtensionContext, private config: Config) {
-        context.subscriptions.push(vscode.commands.registerCommand('extension.createTrelloCard', this.createTrelloCard.bind(this)));
+        context.subscriptions.push(
+            vscode.commands.registerCommand('extension.createTrelloCard', (item: ActionComment | any) => {
+                debugger
+                const name = `${item.commentType}: ${item.label}`;
+                const desc = `[View File](${this.config.scheme}://TzachOvadia.todo-list/view?file=${encodeURIComponent(item.uri.fsPath)}#${item.position})`;
+                this.createTrelloCard(name, desc);
+            }));
     }
 
     updateConfiguration(config: Config) {
         this.config = config;
     }
 
-    async createTrelloCard(item: ActionComment) {
+    async createTrelloCard(name: string, desc: string) {
         let key = 'a20752c7ff035d5001ce2938f298be64';
         let token = this.config.trello.token;
         let listId = this.config.trello.defaultList;
@@ -40,8 +46,6 @@ export class Trello {
             vscode.workspace.getConfiguration('trello').update('defaultList', listId);
         }
 
-        const name = `${item.commentType}: ${item.label}`;
-        const desc = `[View File](${this.config.scheme}://TzachOvadia.todo-list/view?file=${encodeURIComponent(item.uri.fsPath)}#${item.position})`;
         const addCardResult = await this.addTrelloCard(listId, name, desc, key, token);
     }
 
@@ -79,7 +83,7 @@ export class Trello {
             }
 
             const genToken = await vscode.window.showInformationMessage<vscode.MessageItem>(
-                'Trello token is required in order to create new cards.\n\nClick `Generate` to open authorization page.',
+                'Trello token is required in order to create new cards. Click `Generate` to open authorization page.',
                 { modal: false },
                 { title: 'Generate' });
             if (!genToken) {
@@ -149,12 +153,9 @@ function httpPost<T = any>(urlPath: string) {
         };
 
         const req = https.request(options, (res) => {
-            console.log(`STATUS: ${res.statusCode}`);
-            console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
             res.setEncoding('utf8');
             let data = '';
             res.on('data', (chunk) => {
-                console.log(`BODY: ${chunk}`);
                 data += chunk;
             });
             res.on('end', () => {

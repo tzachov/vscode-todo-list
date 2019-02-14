@@ -5,22 +5,22 @@ This VSCode extension will list all of your TODO-type comments in an easy-to-rea
 ## Features
 ### Convenient way to view tagged comments
   
-  ![Preview](docs/images/preview.png)
+  ![Preview](images/preview.png)
 
 ### Remove, Copy & Edit comments easily
 
-  ![Context Menu](docs/images/context.png)
+  ![Context Menu](images/context.png)
 
 ### Insert comment quickly
 Press `Ctrl` + `Shift` + `T` to insert a comment
 
 ### Comment formatting
 
-  ![](docs/images/highlight.png)
+  ![](images/highlight.png)
 
 ### **Trello Integration** - Create Trello card directly from your IDE
 
-  ![Trello Card](docs/images/trello.png)
+  ![Trello Card](images/trello.png)
 
 ## How It Works
 Once installed, you'll see a list of `Action Comments` in `Explorer` view.

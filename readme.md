@@ -2,6 +2,15 @@
 
 This VSCode extension will list all of your TODO-type comments in an easy-to-read tree view panel.
 
+https://marketplace.visualstudio.com/items?itemName=TzachOvadia.todo-list
+
+## Table of Contents
+- [Features](#Features)
+- [How It Works](#How-It-Works)
+- [Supported Comments](#Supported-Comments)
+- [Settings](#Settings)
+- [Supported Languages](#Supported-Languages)
+
 ## Features
 ### Convenient way to view tagged comments
   
@@ -16,7 +25,7 @@ Press `Ctrl` + `Shift` + `T` to insert a comment
 
 ### Comment formatting
 
-  ![](images/highlight.png)
+  ![Comment Format](images/highlight.png)
 
 ### **Trello Integration** - Create Trello card directly from your IDE
 

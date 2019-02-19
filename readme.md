@@ -6,7 +6,6 @@ https://marketplace.visualstudio.com/items?itemName=TzachOvadia.todo-list
 
 ## Table of Contents
 - [Features](#Features)
-- [How It Works](#How-It-Works)
 - [Supported Comments](#Supported-Comments)
 - [Settings](#Settings)
 - [Supported Languages](#Supported-Languages)
@@ -14,34 +13,32 @@ https://marketplace.visualstudio.com/items?itemName=TzachOvadia.todo-list
 ## Features
 ### Convenient way to view tagged comments
   
-  ![Preview](images/preview.png)
+![Preview](images/preview.png)
 
 ### Remove, Copy & Edit comments easily
 
-  ![Context Menu](images/context.png)
+![Context Menu](images/context.png)
+
+#### Usage
+`Right-Click` a comment in `Action Comments` -> Remove/Copy/Edit
 
 ### Insert comment quickly
-Press `Ctrl` + `Shift` + `T` to insert a comment
+Press `Ctrl` + `Shift` + `T` to insert a comment in current cursor position.
 
 ### Comment formatting
 
-  ![Comment Format](images/highlight.png)
+![Comment Format](images/highlight.png)
 
 ### **Trello Integration** - Create Trello card directly from your IDE
 
-  ![Trello Card](images/trello.png)
+![Trello Card](images/trello.png)
 
-## How It Works
-Once installed, you'll see a list of `Action Comments` in `Explorer` view.
-
-The list is updated every time you save a document (configurable)
-
-List Actions:
-- Click an item to open.
-- Click `Remove` to delete the comment from document.
-- `Right-Click -> Edit` to edit selected comment.
-
-Press `Ctrl+Shift+T` to insert a comment in current cursor position.
+#### Usage
+- Right-Click a comment in `Action Comments` list -> `Create Trello Card`.
+  > On first use, you'll have to supply a token. If you don't have a token, just press `Esc` and follow the notification instructions.
+  >
+  >  Next, you'll need to select a Trello list to create cards in.
+- That's it. The card is created in the list you selected on first use.
 
 ## Supported Comments
 TODO List supports any comment written in the next formats:

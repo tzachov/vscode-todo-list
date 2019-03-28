@@ -20,11 +20,14 @@ export function activate(context: vscode.ExtensionContext) {
         const modifications = new Modifications(context, config);
         const decorator = new Deocrator(context, config);
 
-        const fixProvider: vscode.CodeActionProvider = {
-            provideCodeActions: function (document, range, context, token) {
-                return [{ kind: vscode.CodeActionKind.RefactorRewrite, title: 'Tag `TODO`', command: 'extension.convertToComment', arguments: [document, range, 'todo'] }];
-            }
-        };
+        // const fixProvider: vscode.CodeActionProvider = {
+        //     provideCodeActions: function (document, range, context, token) {
+        //         return [{ kind: vscode.CodeActionKind.RefactorRewrite, title: 'Tag `TODO`', command: 'extension.convertToComment', arguments: [document, range, 'todo'] }];
+        //     }
+        // };
+        // const fixer = vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: 'typescript' }, fixProvider);
+        // context.subscriptions.push(fixer);
+
         vscode.commands.registerCommand('extension.convertToComment', (document: vscode.TextDocument, range: vscode.Range, commentType: string) => {
             const selectedText = document.getText(range);
             console.log(selectedText);
@@ -44,8 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
             console.log(comment);
         });
-        const fixer = vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: 'typescript' }, fixProvider);
-        context.subscriptions.push(fixer);
+        
 
         context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
             config = getConfig();

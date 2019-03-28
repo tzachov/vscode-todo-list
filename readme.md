@@ -1,6 +1,8 @@
 # TODO List
 
-This VSCode extension will list all of your TODO-type comments in an easy-to-read tree view panel.
+List all of your TODO-type comments in an easy-to-read tree view panel.
+`Syntax Highlighting` and `Trello Integration` included.
+
 
 https://marketplace.visualstudio.com/items?itemName=TzachOvadia.todo-list
 

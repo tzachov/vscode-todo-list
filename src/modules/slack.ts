@@ -23,7 +23,7 @@ export class Slack {
 
     private async sendToSlack(item: ActionComment) {
         const channel = 'D30BRHZQW'; // TODO: read from config
-        const token = 'xoxp-75199072976-102410804007-614487386452-38a94d5b92c7d3d9ab2f5622b3880fee'; // TODO: read from config
+        const token = ''; // TODO: read from config
         const text = await this.createSnippet(item);
         const request = { channel, text, token };
         const response = await this.sendRequest(request, token);

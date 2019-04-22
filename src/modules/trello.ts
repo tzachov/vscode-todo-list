@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
-import * as https from 'https';
-import * as http from 'http';
+
 const clipboardy = require('clipboardy');
 
 import { Config } from '../config';
 import { ActionComment } from '../models/action-comment';
+import { httpPost, httpGet } from '../functions/http';
 
 export class Trello {
 
@@ -114,60 +114,6 @@ export class Trello {
     }
 
     private addTrelloCard(listId: string, name: string, desc: string, key: string, token: string) {
-        return httpPost(`/1/cards?idList=${listId}&name=${encodeURIComponent(name)}&desc=${encodeURIComponent(desc)}&keepFromSource=all&key=${key}&token=${token}`);
+        return httpPost('api.trello.com', `/1/cards?idList=${listId}&name=${encodeURIComponent(name)}&desc=${encodeURIComponent(desc)}&keepFromSource=all&key=${key}&token=${token}`);
     }
-}
-
-function httpGet<T = any>(url: string): Promise<T> {
-    return new Promise((resolve, reject) => {
-        https.get(url, (res: http.IncomingMessage) => {
-            res.setEncoding('utf8');
-            let rawData = '';
-            res.on('data', (chunk) => { rawData += chunk; });
-            res.on('end', () => {
-                try {
-                    const parsedData = JSON.parse(rawData);
-                    resolve(parsedData);
-                } catch (e) {
-                    reject(e);
-                }
-            });
-        }).on('error', (e) => reject(e));
-    });
-}
-
-function httpPost<T = any>(urlPath: string) {
-    return new Promise((resolve, reject) => {
-        const postData = '';
-
-        const options: http.RequestOptions = {
-            hostname: 'api.trello.com',
-            port: 443,
-            path: urlPath,
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(postData)
-            }
-        };
-
-        const req = https.request(options, (res) => {
-            res.setEncoding('utf8');
-            let data = '';
-            res.on('data', (chunk) => {
-                data += chunk;
-            });
-            res.on('end', () => {
-                resolve(data);
-            });
-        });
-
-        req.on('error', (e) => {
-            reject(e);
-        });
-
-        // write data to request body
-        req.write(postData);
-        req.end();
-    });
 }

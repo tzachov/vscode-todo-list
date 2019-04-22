@@ -8,6 +8,7 @@ import { Trello } from './modules/trello';
 import { Modifications } from './modules/modifications';
 import { Deocrator } from './modules/decorator';
 import { Gmail } from './modules/gmail';
+import { Slack } from './modules/slack';
 
 export function activate(context: vscode.ExtensionContext) {
     try {
@@ -21,6 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
         const modifications = new Modifications(context, config);
         const decorator = new Deocrator(context, config);
         const gmail = new Gmail(context, config);
+        const slack = new Slack(context, config);
 
         // const fixProvider: vscode.CodeActionProvider = {
         //     provideCodeActions: function (document, range, context, token) {
@@ -61,6 +63,9 @@ export function activate(context: vscode.ExtensionContext) {
             }
             if (e.affectsConfiguration('expression') || e.affectsConfiguration('enableCommentFormatting')) {
                 decorator.updateConfiguration(config);
+            }
+            if (e.affectsConfiguration('slack')) {
+                slack.updateConfiguration(config);
             }
         }));
     } catch (e) {

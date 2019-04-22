@@ -112,6 +112,11 @@
         "category": "TODO List"
       },
       {
+        "command": "extension.sendToSlack",
+        "title": "Send to Slack",
+        "category": "TODO List"
+      },
+      {
         "command": "extension.copyComment",
         "title": "Copy",
         "category": "TODO List"
@@ -185,6 +190,11 @@
         },
         {
           "command": "extension.sendUsingGmail",
+          "when": "view == actionComments && viewItem != $GROUP",
+          "group": "z_commands"
+        },
+        {
+          "command": "extension.sendToSlack",
           "when": "view == actionComments && viewItem != $GROUP",
           "group": "z_commands"
         }

@@ -24,7 +24,19 @@
     "Other",
     "Formatters"
   ],
-  "keywords": ["todo", "hack", "fixme", "list", "trello", "comment", "tree", "view", "task", "highlight", "format"],
+  "keywords": [
+    "todo",
+    "hack",
+    "fixme",
+    "list",
+    "trello",
+    "comment",
+    "tree",
+    "view",
+    "task",
+    "highlight",
+    "format"
+  ],
   "activationEvents": [
     "*"
   ],
@@ -92,6 +104,11 @@
       {
         "command": "extension.createTrelloCard",
         "title": "Create Trello Card",
+        "category": "TODO List"
+      },
+      {
+        "command": "extension.sendUsingGmail",
+        "title": "Send using Gmail",
         "category": "TODO List"
       },
       {
@@ -163,6 +180,11 @@
         },
         {
           "command": "extension.createTrelloCard",
+          "when": "view == actionComments && viewItem != $GROUP",
+          "group": "z_commands"
+        },
+        {
+          "command": "extension.sendUsingGmail",
           "when": "view == actionComments && viewItem != $GROUP",
           "group": "z_commands"
         }

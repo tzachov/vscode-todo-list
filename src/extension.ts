@@ -7,6 +7,7 @@ import { TodoUriHandler } from './modules/uri-handler';
 import { Trello } from './modules/trello';
 import { Modifications } from './modules/modifications';
 import { Deocrator } from './modules/decorator';
+import { Gmail } from './modules/gmail';
 
 export function activate(context: vscode.ExtensionContext) {
     try {
@@ -19,6 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
         const trello = new Trello(context, config);
         const modifications = new Modifications(context, config);
         const decorator = new Deocrator(context, config);
+        const gmail = new Gmail(context, config);
 
         // const fixProvider: vscode.CodeActionProvider = {
         //     provideCodeActions: function (document, range, context, token) {

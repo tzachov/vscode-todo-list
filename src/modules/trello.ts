@@ -11,7 +11,6 @@ export class Trello {
     constructor(context: vscode.ExtensionContext, private config: Config) {
         context.subscriptions.push(
             vscode.commands.registerCommand('extension.createTrelloCard', (item: ActionComment | any) => {
-                debugger
                 const name = `${item.commentType}: ${item.label}`;
                 const desc = `[View File](${this.config.scheme}://TzachOvadia.todo-list/view?file=${encodeURIComponent(item.uri.fsPath)}#${item.position})`;
                 this.createTrelloCard(name, desc);

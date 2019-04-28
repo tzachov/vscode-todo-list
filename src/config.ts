@@ -6,6 +6,7 @@ export interface Config {
     trello: TrelloConfig;
     scheme: 'vscode' | 'vscode-insiders';
     enableCommentFormatting: boolean;
+    enableTelemetry: boolean;
 }
 
 export interface TrelloConfig {

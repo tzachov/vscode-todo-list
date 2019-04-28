@@ -5,6 +5,7 @@ const clipboardy = require('clipboardy');
 
 import { Config } from '../config';
 import { ActionComment } from '../models/action-comment';
+import { TrackFeature } from './telemetry';
 
 export class Trello {
 
@@ -21,6 +22,7 @@ export class Trello {
         this.config = config;
     }
 
+    @TrackFeature('createCard')
     async createTrelloCard(name: string, desc: string) {
         let key = 'a20752c7ff035d5001ce2938f298be64';
         let token = this.config.trello.token;

@@ -8,8 +8,9 @@ import { Trello } from './modules/trello';
 import { Modifications } from './modules/modifications';
 import { Deocrator } from './modules/decorator';
 import { Gmail } from './modules/gmail';
+import { Telemetry } from './modules/telemetry';
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
     try {
         let config = getConfig();
 
@@ -17,6 +18,14 @@ export function activate(context: vscode.ExtensionContext) {
 
         context.subscriptions.push(vscode.window.registerUriHandler(new TodoUriHandler()));
 
+        if (config.enableTelemetry === null) {
+            const userResponse = await vscode.window.showInformationMessage('Enable telemetry?', 'Yes', 'No');
+            const enableTelemetry = userResponse === 'Yes' ? true : false;
+            vscode.workspace.getConfiguration().update('enableTelemetry', enableTelemetry);
+            config.enableTelemetry = enableTelemetry;
+        }
+        Telemetry.init('4bf4cf26-e6f8-4d6d-bb6f-9e7b3cee7cdf', config);
+        Telemetry.trackLoad();
         const trello = new Trello(context, config);
         const modifications = new Modifications(context, config);
         const decorator = new Deocrator(context, config);
@@ -49,7 +58,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
             console.log(comment);
         });
-        
+
 
         context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
             config = getConfig();
@@ -61,6 +70,9 @@ export function activate(context: vscode.ExtensionContext) {
             }
             if (e.affectsConfiguration('expression') || e.affectsConfiguration('enableCommentFormatting')) {
                 decorator.updateConfiguration(config);
+            }
+            if (e.affectsConfiguration('enableTelemetry')) {
+                Telemetry.updateConfiguration(config);
             }
         }));
     } catch (e) {
@@ -82,6 +94,7 @@ function getConfig() {
         trello: vscode.workspace.getConfiguration().get<TrelloConfig>('trello'),
         scheme: appScheme,
         enableCommentFormatting: vscode.workspace.getConfiguration().get('enableCommentFormatting'),
+        enableTelemetry: vscode.workspace.getConfiguration().get('enableTelemetry')
     };
 
     return config;

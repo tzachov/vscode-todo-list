@@ -6,6 +6,7 @@ import { ActionCommentCollection } from './models/action-comment-collection';
 import { readComments, readCommentsInFile } from './functions/read-comments';
 import { removeComment } from './functions/remove-comment';
 import { createTree } from './functions/create-tree';
+import { TrackFeature } from './modules/telemetry';
 
 export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<ActionComment> {
     private _onDidChangeTreeData: vscode.EventEmitter<ActionComment> = new vscode.EventEmitter<ActionComment>();
@@ -70,6 +71,7 @@ export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<Ac
         }
     }
 
+    @TrackFeature()
     async removeItem(resource: vscode.Uri, start: number, length: number) {
         await removeComment(resource, start, length);
         this.refresh(true, resource);

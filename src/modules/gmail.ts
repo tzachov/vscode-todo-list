@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 import { ActionComment } from '../models/action-comment';
 import { Config } from '../config';
+import { Telemetry, TrackFeature } from './telemetry';
 
 export class Gmail {
 
@@ -9,6 +10,7 @@ export class Gmail {
         context.subscriptions.push(vscode.commands.registerCommand('extension.sendUsingGmail', this.sendUsingGmail.bind(this)));
     }
 
+    @TrackFeature('Send')
     private async sendUsingGmail(comment: ActionComment) {
         const body = await this.getSnippet(comment.uri, comment.position, 5);
         const url = `https://mail.google.com/mail/?view=cm&fs=1&su=${comment.label}&body=${body}`;

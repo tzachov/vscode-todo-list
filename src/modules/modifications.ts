@@ -6,6 +6,7 @@ import { ActionComment } from '../models/action-comment';
 import { generateComment } from '../functions/generate-comment';
 import { editComment } from '../functions/edit-comment';
 import { insertComment } from '../functions/insert-comment';
+import { TrackFeature } from './telemetry';
 
 export class Modifications {
 
@@ -19,6 +20,7 @@ export class Modifications {
         this.config = config;
     }
 
+    @TrackFeature('edit')
     private async editCommentCommand(item: ActionComment) {
         item = await this.getUserInputs(item);
 
@@ -30,6 +32,7 @@ export class Modifications {
         editComment(item, newComment);
     }
 
+    @TrackFeature('insert')
     private async insertCommentCommand() {
         const item = await this.getUserInputs();
         if (!item) {
@@ -38,6 +41,7 @@ export class Modifications {
         insertComment(item);
     }
 
+    @TrackFeature('copy')
     private async copyCommentCommand(item: ActionComment) {
         const text = generateComment(item);
         await clipboardy.write(text);

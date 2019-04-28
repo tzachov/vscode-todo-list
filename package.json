@@ -53,9 +53,10 @@
     "tslib": "^1.9.3"
   },
   "dependencies": {
+    "applicationinsights": "^1.3.1",
+    "clipboardy": "^1.2.3",
     "fs": "^0.0.2",
-    "path": "0.12.7",
-    "clipboardy": "^1.2.3"
+    "path": "0.12.7"
   },
   "contributes": {
     "commands": [
@@ -239,6 +240,11 @@
           "type": "boolean",
           "default": true,
           "description": "Enable comment formatting (Set color for comment type and make text italic)"
+        },
+        "enableTelemetry": {
+          "type": "boolean",
+          "default": null,
+          "description": "Enable anonymous data collection (only collects extension started and extension actions used) - No personal or project data is sent"
         },
         "trello.token": {
           "type": "string",

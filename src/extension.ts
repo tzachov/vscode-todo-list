@@ -1,7 +1,7 @@
 'use strict';
 import * as vscode from 'vscode';
 
-import { Config, TrelloConfig } from './config';
+import { Config, TrelloConfig, SlackConfig } from './config';
 import { registerTreeViewProvider } from './functions/register-tree';
 import { TodoUriHandler } from './modules/uri-handler';
 import { Trello } from './modules/trello';
@@ -85,6 +85,7 @@ function getConfig() {
         scanOnSave: vscode.workspace.getConfiguration().get('scanOnSave'),
         name: vscode.workspace.getConfiguration().get('name'),
         trello: vscode.workspace.getConfiguration().get<TrelloConfig>('trello'),
+        slack: vscode.workspace.getConfiguration().get<SlackConfig>('slack'),
         scheme: appScheme,
         enableCommentFormatting: vscode.workspace.getConfiguration().get('enableCommentFormatting'),
     };

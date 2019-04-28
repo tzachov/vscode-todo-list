@@ -22,12 +22,38 @@ export class Slack {
     }
 
     private async sendToSlack(item: ActionComment) {
-        const channel = 'D30BRHZQW'; // TODO: read from config
-        const token = ''; // TODO: read from config
-        const text = await this.createSnippet(item);
-        const request = { channel, text, token };
-        const response = await this.sendRequest(request, token);
-        console.log(response);
+        try {
+            const token = await this.getAuthToken(); // TODO: read from config
+            const channel = await this.getChannel(); // 'D30BRHZQW'; // TODO: read from config
+            const text = await this.createSnippet(item);
+            const request = { channel, text, token };
+            const response = await this.sendRequest(request, token);
+            console.log(response);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    private async getAuthToken(): Promise<string> {
+        if (!!this.config.slack && !!this.config.slack.token) {
+            return Promise.resolve(this.config.slack.token);
+        }
+
+        return Promise.resolve('');
+    }
+
+    private async getChannel(): Promise<string> {
+        if (!!this.config.slack && !!this.config.slack.channelId) {
+            return this.config.slack.channelId;
+        }
+
+        const channelId = await vscode.window.showInputBox({ prompt: 'Select channel ID' });
+        if (!channelId) {
+            throw new Error('channel id not selected');
+        }
+
+        vscode.workspace.getConfiguration('slack').update('channelId', channelId);
+        return channelId;
     }
 
     private async createSnippet(item: ActionComment) {
@@ -50,7 +76,8 @@ export class Slack {
         if (!response.ok) {
             const AUTHENTICATE_ACTION = 'Authenticate';
             const RETRY_ACTION = 'Retry';
-            const errorAction = await vscode.window.showErrorMessage(`Could not send to Slack (${response.error})`, response.error === 'not_authed' ? 'Authenticate' : 'Retry');
+            const actionButton = response.error === 'not_authed' ? AUTHENTICATE_ACTION : RETRY_ACTION;
+            const errorAction = await vscode.window.showErrorMessage(`Could not send to Slack (${response.error})`, { modal: false }, actionButton);
             if (errorAction === RETRY_ACTION) {
                 response = await this.sendRequest(request, token);
             }

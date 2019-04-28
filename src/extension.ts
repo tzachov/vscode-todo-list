@@ -19,9 +19,9 @@ export async function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(vscode.window.registerUriHandler(new TodoUriHandler()));
 
         if (config.enableTelemetry === null) {
-            const userResponse = await vscode.window.showInformationMessage('Enable telemetry?', 'Yes', 'No');
+            const userResponse = await vscode.window.showInformationMessage('Enable minial telemetry? No personal or project data will be sent', 'Yes', 'No');
             const enableTelemetry = userResponse === 'Yes' ? true : false;
-            vscode.workspace.getConfiguration().update('enableTelemetry', enableTelemetry);
+            vscode.workspace.getConfiguration().update('enableTelemetry', enableTelemetry, vscode.ConfigurationTarget.Global);
             config.enableTelemetry = enableTelemetry;
         }
         Telemetry.init('4bf4cf26-e6f8-4d6d-bb6f-9e7b3cee7cdf', config);

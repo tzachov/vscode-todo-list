@@ -31,7 +31,7 @@ export class Trello {
         if (!token) {
             try {
                 token = await this.getToken(key);
-                vscode.workspace.getConfiguration('trello').update('token', token);
+                vscode.workspace.getConfiguration('trello').update('token', token, vscode.ConfigurationTarget.Global);
             } catch (e) {
                 return;
             }
@@ -44,7 +44,7 @@ export class Trello {
             }
             listId = list.id;
 
-            vscode.workspace.getConfiguration('trello').update('defaultList', listId);
+            vscode.workspace.getConfiguration('trello').update('defaultList', listId, vscode.ConfigurationTarget.Global);
         }
 
         const addCardResult = await this.addTrelloCard(listId, name, desc, key, token);

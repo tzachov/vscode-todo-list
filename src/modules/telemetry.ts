@@ -11,7 +11,7 @@ export class Telemetry {
     private static enabled: boolean;
 
     static init(config: Config) {
-        this.enabled = config.enableTelemetry;
+        this.enabled = vscode.debug.activeDebugSession === undefined && config.enableTelemetry;
 
         if (this.initialized || !this.enabled) {
             return;
@@ -19,21 +19,26 @@ export class Telemetry {
 
         try {
             this.appInsights = require('applicationinsights');
-            this.appInsights.setup(APP_INSIGHTS_KEY);
-            this.appInsights.start();
+            this.appInsights.setup(APP_INSIGHTS_KEY)
+                .setAutoDependencyCorrelation(false)
+                .setAutoCollectRequests(false)
+                .setAutoCollectPerformance(false)
+                .setAutoCollectExceptions(true)
+                .setAutoCollectDependencies(false)
+                .setAutoCollectConsole(false)
+                .setUseDiskRetryCaching(true)
+                .setSendLiveMetrics(true)
+                .start();
             this.client = this.appInsights.defaultClient;
 
             const extension = vscode.extensions.getExtension('TzachOvadia.todo-list');
+            this.appInsights.defaultClient.context.tags[this.appInsights.defaultClient.context.keys.cloudRole] = extension.packageJSON.name;
 
             if (vscode && vscode.env) {
-                this.client.context.tags[this.client.context.keys.appName] = extension.packageJSON.name;
                 this.client.context.tags[this.client.context.keys.userId] = vscode.env.machineId;
                 this.client.context.tags[this.client.context.keys.sessionId] = vscode.env.sessionId;
             }
 
-            this.appInsights.defaultClient.commonProperties = {
-                appName: extension.packageJSON.name
-            };
             this.initialized = true;
         } catch (e) {
             console.error('Could not initialize Telemetry', e);
@@ -49,7 +54,7 @@ export class Telemetry {
             return;
         }
         this.client.context.tags[this.client.context.keys.operationName] = 'state';
-        this.client.trackTrace({ name: 'Load' });
+        this.client.trackTrace({ message: 'Load' });
     }
 
     static trackException(error: Error, initiator?: string) {

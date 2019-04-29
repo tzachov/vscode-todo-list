@@ -4,15 +4,17 @@ import { Config } from '../config';
 import { openResource } from './open-resource';
 import { ActionComment } from '../models/action-comment';
 import { TrackFeature } from '../modules/telemetry';
+import { registerCommand } from './register-command';
 
 export function registerTreeViewProvider(context: vscode.ExtensionContext, config: Config) {
     const actionCommentTreeViewProvider = new ActionCommentTreeViewProvider(config);
     const treeActions = new TreeActions(actionCommentTreeViewProvider);
-    context.subscriptions.push(vscode.commands.registerCommand('extension.openFile', treeActions.openFile.bind(this)));
-    context.subscriptions.push(vscode.commands.registerCommand('extension.viewComment', treeActions.viewComment.bind(this)));
-    context.subscriptions.push(vscode.commands.registerCommand('extension.refreshActionComments', treeActions.refreshActionComments.bind(treeActions)));
-    context.subscriptions.push(vscode.commands.registerCommand('extension.removeActionComment', treeActions.removeActionComment.bind(treeActions)));
-    context.subscriptions.push(vscode.commands.registerCommand('extension.collapseAll', treeActions.collapseAll.bind(treeActions)));
+
+    registerCommand(context, 'extension.openFile', treeActions.openFile.bind(this));
+    registerCommand(context, 'extension.viewComment', treeActions.viewComment.bind(this));
+    registerCommand(context, 'extension.refreshActionComments', treeActions.refreshActionComments.bind(treeActions));
+    registerCommand(context, 'extension.removeActionComment', treeActions.removeActionComment.bind(treeActions));
+    registerCommand(context, 'extension.collapseAll', treeActions.collapseAll.bind(treeActions));
 
     context.subscriptions.push(vscode.window.registerTreeDataProvider('actionComments', actionCommentTreeViewProvider));
 }

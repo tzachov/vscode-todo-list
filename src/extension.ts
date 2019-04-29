@@ -18,14 +18,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         context.subscriptions.push(vscode.window.registerUriHandler(new TodoUriHandler()));
 
-        if (config.enableTelemetry === null) {
-            const userResponse = await vscode.window.showInformationMessage('Enable minimal telemetry? No personal or project data will be sent', 'Enable');
-            const enableTelemetry = userResponse === 'Enable' ? true : false;
-            vscode.workspace.getConfiguration().update('enableTelemetry', enableTelemetry, vscode.ConfigurationTarget.Global);
-            config.enableTelemetry = enableTelemetry;
-        }
-        Telemetry.init(config);
-        Telemetry.trackLoad();
+        await setupTelemetry(config);
         const trello = new Trello(context, config);
         const modifications = new Modifications(context, config);
         const decorator = new Deocrator(context, config);
@@ -80,8 +73,20 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 }
 
-export function deactivate() {
+export function deactivate() { }
 
+async function setupTelemetry(config: Config) {
+    if (config.enableTelemetry === null) {
+        const message = 'Enable minimal telemetry? This will let us know which features are more useful so we could make them better - No personal or project data will be sent';
+        const enableAction = 'Yes';
+        const cancelAction = 'No';
+        const userResponse = await vscode.window.showInformationMessage(message, enableAction, cancelAction);
+        const enableTelemetry = userResponse === enableAction ? true : false;
+        vscode.workspace.getConfiguration().update('enableTelemetry', enableTelemetry, vscode.ConfigurationTarget.Global);
+        config.enableTelemetry = enableTelemetry;
+    }
+    Telemetry.init(config);
+    Telemetry.trackLoad();
 }
 
 function getConfig() {
@@ -94,7 +99,7 @@ function getConfig() {
         trello: vscode.workspace.getConfiguration().get<TrelloConfig>('trello'),
         scheme: appScheme,
         enableCommentFormatting: vscode.workspace.getConfiguration().get('enableCommentFormatting'),
-        enableTelemetry: vscode.workspace.getConfiguration().get('enableTelemetry')
+        enableTelemetry: vscode.workspace.getConfiguration().get('enableTelemetry', null)
     };
 
     return config;

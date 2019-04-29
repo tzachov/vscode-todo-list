@@ -2,12 +2,13 @@ import * as vscode from 'vscode';
 
 import { ActionComment } from '../models/action-comment';
 import { Config } from '../config';
-import { Telemetry, TrackFeature } from './telemetry';
+import { TrackFeature } from './telemetry';
+import { registerCommand } from '../functions/register-command';
 
 export class Gmail {
 
     constructor(context: vscode.ExtensionContext, private config: Config) {
-        context.subscriptions.push(vscode.commands.registerCommand('extension.sendUsingGmail', this.sendUsingGmail.bind(this)));
+        registerCommand(context, 'extension.sendUsingGmail', this.sendUsingGmail.bind(this));
     }
 
     @TrackFeature('Send')

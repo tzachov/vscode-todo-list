@@ -7,20 +7,21 @@ import { generateComment } from '../functions/generate-comment';
 import { editComment } from '../functions/edit-comment';
 import { insertComment } from '../functions/insert-comment';
 import { TrackFeature } from './telemetry';
+import { registerCommand } from '../functions/register-command';
 
 export class Modifications {
 
     constructor(context: vscode.ExtensionContext, private config: Config) {
-        context.subscriptions.push(vscode.commands.registerCommand('extension.editComment', this.editCommentCommand.bind(this)));
-        context.subscriptions.push(vscode.commands.registerCommand('extension.insertComment', this.insertCommentCommand.bind(this)));
-        context.subscriptions.push(vscode.commands.registerCommand('extension.copyComment', this.copyCommentCommand.bind(this)));
+        registerCommand(context, 'extension.editComment', this.editCommentCommand.bind(this));
+        registerCommand(context, 'extension.insertComment', this.insertCommentCommand.bind(this));
+        registerCommand(context, 'extension.copyComment', this.copyCommentCommand.bind(this));
     }
 
     updateConfiguration(config: Config) {
         this.config = config;
     }
 
-    @TrackFeature('edit')
+    @TrackFeature('Edit')
     private async editCommentCommand(item: ActionComment) {
         item = await this.getUserInputs(item);
 
@@ -32,7 +33,7 @@ export class Modifications {
         editComment(item, newComment);
     }
 
-    @TrackFeature('insert')
+    @TrackFeature('Insert')
     private async insertCommentCommand() {
         const item = await this.getUserInputs();
         if (!item) {
@@ -41,7 +42,7 @@ export class Modifications {
         insertComment(item);
     }
 
-    @TrackFeature('copy')
+    @TrackFeature('Copy')
     private async copyCommentCommand(item: ActionComment) {
         const text = generateComment(item);
         await clipboardy.write(text);

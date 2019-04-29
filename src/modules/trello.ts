@@ -6,24 +6,23 @@ const clipboardy = require('clipboardy');
 import { Config } from '../config';
 import { ActionComment } from '../models/action-comment';
 import { TrackFeature } from './telemetry';
+import { registerCommand } from '../functions/register-command';
 
 export class Trello {
 
     constructor(context: vscode.ExtensionContext, private config: Config) {
-        context.subscriptions.push(
-            vscode.commands.registerCommand('extension.createTrelloCard', (item: ActionComment | any) => {
-                const name = `${item.commentType}: ${item.label}`;
-                const desc = `[View File](${this.config.scheme}://TzachOvadia.todo-list/view?file=${encodeURIComponent(item.uri.fsPath)}#${item.position})`;
-                this.createTrelloCard(name, desc);
-            }));
+        registerCommand(context, 'extension.createTrelloCard', this.createTrelloCard.bind(this));
     }
 
     updateConfiguration(config: Config) {
         this.config = config;
     }
 
-    @TrackFeature('createCard')
-    async createTrelloCard(name: string, desc: string) {
+    @TrackFeature('CreateCard')
+    async createTrelloCard(item: ActionComment) {
+        const name = `${item.commentType}: ${item.label}`;
+        const desc = `[View File](${this.config.scheme}://TzachOvadia.todo-list/view?file=${encodeURIComponent(item.uri.fsPath)}#${item.position})`;
+
         let key = 'a20752c7ff035d5001ce2938f298be64';
         let token = this.config.trello.token;
         let listId = this.config.trello.defaultList;

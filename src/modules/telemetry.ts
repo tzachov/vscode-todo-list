@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import { Config } from '../config';
 
+const APP_INSIGHTS_KEY = '4bf4cf26-e6f8-4d6d-bb6f-9e7b3cee7cdf';
+
 export class Telemetry {
 
     private static appInsights: any;
@@ -8,16 +10,16 @@ export class Telemetry {
     private static initialized = false;
     private static enabled: boolean;
 
-    static init(key: string, config: Config) {
-        if (this.initialized) {
+    static init(config: Config) {
+        this.enabled = config.enableTelemetry;
+
+        if (this.initialized || !this.enabled) {
             return;
         }
 
-        this.enabled = config.enableTelemetry;
-
         try {
             this.appInsights = require('applicationinsights');
-            this.appInsights.setup(key);
+            this.appInsights.setup(APP_INSIGHTS_KEY);
             this.appInsights.start();
             this.client = this.appInsights.defaultClient;
 
@@ -39,7 +41,7 @@ export class Telemetry {
     }
 
     static updateConfiguration(config: Config) {
-        this.enabled = config.enableTelemetry;
+        this.init(config);
     }
 
     static trackLoad() {

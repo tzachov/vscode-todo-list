@@ -24,6 +24,7 @@ export function createTree(comments: ActionCommentCollection) {
             actionComment.uri = actionComment.uri;
             actionComment.command = new OpenFileCommand(actionComment.uri, actionComment.position);
             actionComment.type = 'Value';
+            actionComment.contextValue = '$Comment';
             actionComment.iconPath = {
                 light: getIconPath(actionComment.commentType, 'light'),
                 dark: getIconPath(actionComment.commentType, 'dark')

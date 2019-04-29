@@ -39,7 +39,7 @@ export function readCommentsInFile(expression: RegExp, file: vscode.Uri) {
             groups.name = null;
         }
         const label = groups.text.replace(/[ ]?\*\/$/, '');
-        const commentType = groups.type.toUpperCase();
+        const commentType = (groups.type || 'TODO').toUpperCase();
         const comment: ActionComment = new ActionComment(label);
         const tooltip = [];
         if (groups.name) {

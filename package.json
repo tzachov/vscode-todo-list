@@ -1,7 +1,7 @@
 {
   "name": "todo-list",
   "displayName": "TODO List",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "List all action comments (TODO, FIXME, HACK etc) in an easy-to-read list",
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
@@ -30,6 +30,7 @@
     "fixme",
     "list",
     "trello",
+    "gmail",
     "comment",
     "tree",
     "view",
@@ -156,37 +157,37 @@
       "view/item/context": [
         {
           "command": "extension.removeActionComment",
-          "when": "view == actionComments && viewItem != $GROUP",
+          "when": "view == actionComments && viewItem == $Comment",
           "group": "inline"
         },
         {
           "command": "extension.viewComment",
-          "when": "view == actionComments && viewItem != $GROUP",
+          "when": "view == actionComments && viewItem == $Comment",
           "group": "3_open"
         },
         {
           "command": "extension.removeActionComment",
-          "when": "view == actionComments && viewItem != $GROUP",
+          "when": "view == actionComments && viewItem == $Comment",
           "group": "7_modification"
         },
         {
           "command": "extension.editComment",
-          "when": "view == actionComments && viewItem != $GROUP",
+          "when": "view == actionComments && viewItem == $Comment",
           "group": "9_cutcopypaste"
         },
         {
           "command": "extension.copyComment",
-          "when": "view == actionComments && viewItem != $GROUP",
+          "when": "view == actionComments && viewItem == $Comment",
           "group": "9_cutcopypaste"
         },
         {
           "command": "extension.createTrelloCard",
-          "when": "view == actionComments && viewItem != $GROUP",
+          "when": "view == actionComments && viewItem == $Comment",
           "group": "z_commands"
         },
         {
           "command": "extension.sendUsingGmail",
-          "when": "view == actionComments && viewItem != $GROUP",
+          "when": "view == actionComments && viewItem == $Comment",
           "group": "z_commands"
         }
       ],

@@ -71,7 +71,6 @@ export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<Ac
         }
     }
 
-    @TrackFeature()
     async removeItem(resource: vscode.Uri, start: number, length: number) {
         await removeComment(resource, start, length);
         this.refresh(true, resource);

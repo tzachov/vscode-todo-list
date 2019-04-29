@@ -6,6 +6,8 @@ List all of your TODO-type comments in an easy-to-read tree view panel.
 
 https://marketplace.visualstudio.com/items?itemName=TzachOvadia.todo-list
 
+![Usage Example](images/usage.gif)
+
 ## Table of Contents
 - [Features](#Features)
 - [Supported Comments](#Supported-Comments)
@@ -33,7 +35,7 @@ Press `Ctrl` + `Shift` + `T` to insert a comment in current cursor position.
 
 ### **Trello Integration** - Create Trello card directly from your IDE
 
-![Trello Card](images/trello.png)
+![Trello Card](images/trello.gif)
 
 #### Usage
 - Right-Click a comment in `Action Comments` list -> `Create Trello Card`.
@@ -41,6 +43,13 @@ Press `Ctrl` + `Shift` + `T` to insert a comment in current cursor position.
   >
   >  Next, you'll need to select a Trello list to create cards in.
 - That's it. The card is created in the list you selected on first use.
+
+### **Gmail Integration** - Send comment to mail recipient
+
+![Gmail Integration](images/gmail.gif)
+
+#### Usage
+- Right-Click a comment in `Action Comments` list -> `Send using Gmail`.
 
 ## Supported Comments
 TODO List supports any comment written in the next formats:
@@ -53,7 +62,7 @@ Examples:
 ```
 // TODO: Refactor everything
 /* FIXME: Please please please */
-// HACK(Tzach): This is a workaround
+// HACK(tzach): This is a workaround
 ```
 
 Common tags/types:

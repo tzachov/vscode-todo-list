@@ -32,25 +32,25 @@ export async function activate(context: vscode.ExtensionContext) {
         // const fixer = vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: 'typescript' }, fixProvider);
         // context.subscriptions.push(fixer);
 
-        vscode.commands.registerCommand('extension.convertToComment', (document: vscode.TextDocument, range: vscode.Range, commentType: string) => {
-            const selectedText = document.getText(range);
-            console.log(selectedText);
-            let res;
-            let comment;
-            while (res = config.expression.exec(selectedText)) {
-                const groups = {
-                    type: res[1],
-                    name: res[2],
-                    text: res[res.length - 1]
-                };
-                if (res.length < 4) {
-                    groups.name = null;
-                }
+        // vscode.commands.registerCommand('extension.convertToComment', (document: vscode.TextDocument, range: vscode.Range, commentType: string) => {
+        //     const selectedText = document.getText(range);
+        //     console.log(selectedText);
+        //     let res;
+        //     let comment;
+        //     while (res = config.expression.exec(selectedText)) {
+        //         const groups = {
+        //             type: res[1],
+        //             name: res[2],
+        //             text: res[res.length - 1]
+        //         };
+        //         if (res.length < 4) {
+        //             groups.name = null;
+        //         }
 
-                comment = { ...groups };
-            }
-            console.log(comment);
-        });
+        //         comment = { ...groups };
+        //     }
+        //     console.log(comment);
+        // });
 
 
         context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {

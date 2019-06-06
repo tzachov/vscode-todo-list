@@ -1,7 +1,7 @@
 {
   "name": "todo-list",
   "displayName": "TODO List",
-  "version": "1.2.8",
+  "version": "1.2.10",
   "description": "List all action comments (TODO, FIXME, HACK etc) in an easy-to-read list",
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
@@ -150,6 +150,18 @@
           "when": "false"
         },
         {
+          "command": "extension.convertToComment",
+          "when": "false"
+        },
+        {
+          "command": "extension.sendUsingGmail",
+          "when": "false"
+        },
+        {
+          "command": "extension.createTrelloCard",
+          "when": "false"
+        },
+        {
           "command": "extension.insertComment",
           "when": "resourceLangId =~ /typescript|javascript/"
         }
@@ -203,6 +215,7 @@
       {
         "command": "extension.insertComment",
         "key": "ctrl+shift+t",
+        "mac": "cmd+shift+t",
         "when": "resourceLangId =~ /typescript|javascript/"
       }
     ],

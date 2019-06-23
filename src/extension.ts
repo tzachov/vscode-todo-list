@@ -9,14 +9,13 @@ import { Modifications } from './modules/modifications';
 import { Deocrator } from './modules/decorator';
 import { Gmail } from './modules/gmail';
 import { Telemetry } from './modules/telemetry';
-import { parseComment } from './functions/read-comments';
 import { CodeActions } from './modules/code-actions';
 
 export async function activate(context: vscode.ExtensionContext) {
     try {
         let config = getConfig();
 
-        registerTreeViewProvider(context, config);
+        const tree = registerTreeViewProvider(context, config);
 
         context.subscriptions.push(vscode.window.registerUriHandler(new TodoUriHandler()));
 
@@ -44,6 +43,9 @@ export async function activate(context: vscode.ExtensionContext) {
             if (e.affectsConfiguration('expression')) {
                 codeActions.updateConfiguration(config);
             }
+            if (e.affectsConfiguration('include') || e.affectsConfiguration('exclude')) {
+                tree.updateConfiguration(config);
+            }
         }));
     } catch (e) {
         vscode.window.showErrorMessage('Could not activate TODO List (' + e.message + ')');
@@ -68,15 +70,17 @@ async function setupTelemetry(config: Config) {
 
 function getConfig() {
     const appScheme = vscode.version.indexOf('insider') > -1 ? 'vscode-insiders' : 'vscode'
+    const configuration = vscode.workspace.getConfiguration();
     const config: Config = {
-        expression: new RegExp(vscode.workspace.getConfiguration().get('expression'), 'g'),
-        exclude: vscode.workspace.getConfiguration().get('exclude'),
-        scanOnSave: vscode.workspace.getConfiguration().get('scanOnSave'),
-        name: vscode.workspace.getConfiguration().get('name'),
-        trello: vscode.workspace.getConfiguration().get<TrelloConfig>('trello'),
+        expression: new RegExp(configuration.get('expression'), 'g'),
+        exclude: configuration.get('exclude'),
+        include: configuration.get('include'),
+        scanOnSave: configuration.get('scanOnSave'),
+        name: configuration.get('name'),
+        trello: configuration.get<TrelloConfig>('trello'),
         scheme: appScheme,
-        enableCommentFormatting: vscode.workspace.getConfiguration().get('enableCommentFormatting'),
-        enableTelemetry: vscode.workspace.getConfiguration().get('enableTelemetry', null)
+        enableCommentFormatting: configuration.get('enableCommentFormatting'),
+        enableTelemetry: configuration.get('enableTelemetry', null)
     };
 
     return config;

@@ -240,6 +240,11 @@
           "default": true,
           "description": "Scan comments when saving a file"
         },
+        "include": {
+          "type": "string",
+          "default": "**/*.{ts,js}",
+          "description": "Glob pattern to include in scans"
+        },
         "exclude": {
           "type": "string",
           "default": "{**/node_modules/**,**/bower_components/**,**/dist/**,**/build/**,**/.vscode/**,**/_output/**,**/*.min.*,**/*.map}",

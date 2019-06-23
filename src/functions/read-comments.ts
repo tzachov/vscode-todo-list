@@ -8,7 +8,7 @@ import { Config } from '../config';
 export async function readComments(config: Config): Promise<ActionCommentCollection> {
     try {
         const result: ActionCommentCollection = {};
-        const files = await vscode.workspace.findFiles('**/*.{ts,js}', config.exclude);
+        const files = await vscode.workspace.findFiles(config.include, config.exclude);
         files.forEach(file => {
             const key = vscode.workspace.asRelativePath(file, true);
             const comments = readCommentsInFile(config.expression, file);

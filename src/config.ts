@@ -1,6 +1,7 @@
 export interface Config {
     expression: RegExp;
     exclude: string;
+    include: string;
     scanOnSave: boolean;
     name?: string;
     trello: TrelloConfig;

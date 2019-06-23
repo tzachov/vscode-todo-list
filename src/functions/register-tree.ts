@@ -17,6 +17,8 @@ export function registerTreeViewProvider(context: vscode.ExtensionContext, confi
     registerCommand(context, 'extension.collapseAll', treeActions.collapseAll.bind(treeActions));
 
     context.subscriptions.push(vscode.window.registerTreeDataProvider('actionComments', actionCommentTreeViewProvider));
+
+    return actionCommentTreeViewProvider;
 }
 
 class TreeActions {

@@ -6,7 +6,6 @@ import { ActionCommentCollection } from './models/action-comment-collection';
 import { readComments, readCommentsInFile } from './functions/read-comments';
 import { removeComment } from './functions/remove-comment';
 import { createTree } from './functions/create-tree';
-import { TrackFeature } from './modules/telemetry';
 
 export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<ActionComment> {
     private _onDidChangeTreeData: vscode.EventEmitter<ActionComment> = new vscode.EventEmitter<ActionComment>();
@@ -23,6 +22,15 @@ export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<Ac
         });
 
         this.refresh(true);
+    }
+
+    async updateConfiguration(config: Config) {
+        this.config = config;
+        try {
+            await this.refresh(true);
+        } catch (e) {
+            console.error('Could not refresh tree after config change', e);
+        }
     }
 
     getTreeItem(element: ActionComment): vscode.TreeItem | Thenable<vscode.TreeItem> {
@@ -54,7 +62,9 @@ export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<Ac
                 if (!!fileComments) {
                     this.comments[key] = fileComments;
                 } else {
-                    delete this.comments[key];
+                    if (key in this.comments) {
+                        delete this.comments[key];
+                    }
                 }
             } else {
                 this.comments = await readComments(this.config);

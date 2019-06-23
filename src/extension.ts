@@ -9,6 +9,8 @@ import { Modifications } from './modules/modifications';
 import { Deocrator } from './modules/decorator';
 import { Gmail } from './modules/gmail';
 import { Telemetry } from './modules/telemetry';
+import { parseComment } from './functions/read-comments';
+import { CodeActions } from './modules/code-actions';
 
 export async function activate(context: vscode.ExtensionContext) {
     try {
@@ -23,35 +25,7 @@ export async function activate(context: vscode.ExtensionContext) {
         const modifications = new Modifications(context, config);
         const decorator = new Deocrator(context, config);
         const gmail = new Gmail(context, config);
-
-        // const fixProvider: vscode.CodeActionProvider = {
-        //     provideCodeActions: function (document, range, context, token) {
-        //         return [{ kind: vscode.CodeActionKind.RefactorRewrite, title: 'Tag `TODO`', command: 'extension.convertToComment', arguments: [document, range, 'todo'] }];
-        //     }
-        // };
-        // const fixer = vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: 'typescript' }, fixProvider);
-        // context.subscriptions.push(fixer);
-
-        // vscode.commands.registerCommand('extension.convertToComment', (document: vscode.TextDocument, range: vscode.Range, commentType: string) => {
-        //     const selectedText = document.getText(range);
-        //     console.log(selectedText);
-        //     let res;
-        //     let comment;
-        //     while (res = config.expression.exec(selectedText)) {
-        //         const groups = {
-        //             type: res[1],
-        //             name: res[2],
-        //             text: res[res.length - 1]
-        //         };
-        //         if (res.length < 4) {
-        //             groups.name = null;
-        //         }
-
-        //         comment = { ...groups };
-        //     }
-        //     console.log(comment);
-        // });
-
+        const codeActions = new CodeActions(context, config);
 
         context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
             config = getConfig();
@@ -66,6 +40,9 @@ export async function activate(context: vscode.ExtensionContext) {
             }
             if (e.affectsConfiguration('enableTelemetry')) {
                 Telemetry.updateConfiguration(config);
+            }
+            if (e.affectsConfiguration('expression')) {
+                codeActions.updateConfiguration(config);
             }
         }));
     } catch (e) {

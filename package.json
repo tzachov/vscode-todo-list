@@ -62,6 +62,10 @@
   "contributes": {
     "commands": [
       {
+        "command": "extension.contextMenu",
+        "title": "TODO Context Menu"
+      },
+      {
         "command": "extension.collapseAll",
         "title": "Collapse All",
         "category": "TODO List",
@@ -126,6 +130,10 @@
     ],
     "menus": {
       "commandPalette": [
+        {
+          "command": "extension.contextMenu",
+          "when": "false"
+        },
         {
           "command": "extension.collapseAll",
           "when": "false"

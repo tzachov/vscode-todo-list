@@ -25,10 +25,10 @@ export class Gmail {
         const endLine = Math.min(editor.document.lineCount, pos.line + numberOfLines);
         let content = editor.document.getText(new vscode.Range(startLine, 0, endLine, 0));
         content = content.trim();
-        const file = `${encodeURIComponent(resource.fsPath)}:${pos.line + 1}:${pos.character + 1}`;
+        const file = `${resource.fsPath}:${pos.line + 1}:${(pos.character || 0) + 1}`;
         const line = '-'.repeat(file.length);
         content = `Snippet:\n${line}\n${content}\n${line}\n${file}`;
-        content = encodeURI(content.replace(/ /g, '+').replace(/\n/g, '%0A'));
+        content = encodeURI(content.replace(/ /g, '+'));
         return content;
     }
 }

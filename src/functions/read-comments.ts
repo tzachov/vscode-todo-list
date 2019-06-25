@@ -71,3 +71,46 @@ export function readCommentsInFile(expression: RegExp, file: vscode.Uri) {
 
     return null;
 }
+
+export function parseComment(expression: RegExp, text: string, file: vscode.Uri, position: any) {
+    const hasBOM = /^\uFEFF/.test(text);
+    const exp = expression.compile(); // HACK: reset expression
+    const res = exp.exec(text);
+
+    const groups = {
+        type: res[1],
+        name: res[2],
+        text: res[res.length - 1]
+    };
+    if (res.length < 4) {
+        groups.name = null;
+    }
+    const label = groups.text.replace(/[ ]?\*\/$/, '');
+    const commentType = (groups.type || 'TODO').toUpperCase();
+    const comment: ActionComment = new ActionComment(label);
+    const tooltip = [];
+    if (groups.name) {
+        tooltip.push(`Created by ${groups.name}`);
+        comment.createdBy = groups.name;
+    }
+    tooltip.push(file.fsPath);
+
+    // let position = expression.lastIndex - res[0].length;
+    if (hasBOM) {
+        position--;
+    }
+
+    const id = file ? encodeURIComponent(file.path) + '_' : '' + `${expression.lastIndex - res[0].length}`;
+    const uri = file || undefined;
+    return {
+        ...comment,
+        commentType,
+        position,
+        uri,
+        type: 'Action',
+        contextValue: commentType,
+        tooltip: tooltip.join('\n'),
+        length: res[0].length,
+        id
+    };
+}

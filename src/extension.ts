@@ -71,6 +71,7 @@ async function setupTelemetry(config: Config) {
 function getConfig() {
     const appScheme = vscode.version.indexOf('insider') > -1 ? 'vscode-insiders' : 'vscode'
     const configuration = vscode.workspace.getConfiguration();
+    
     const config: Config = {
         expression: new RegExp(configuration.get('expression'), 'g'),
         exclude: configuration.get('exclude'),
@@ -80,7 +81,8 @@ function getConfig() {
         trello: configuration.get<TrelloConfig>('trello'),
         scheme: appScheme,
         enableCommentFormatting: configuration.get('enableCommentFormatting'),
-        enableTelemetry: configuration.get('enableTelemetry', null)
+        enableTelemetry: configuration.get('enableTelemetry', null),
+        actionTypes: configuration.get<string>('actionTypes').toUpperCase().split(',')
     };
 
     return config;

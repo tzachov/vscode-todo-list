@@ -6,7 +6,7 @@ List all of your TODO-type comments in an easy-to-read tree view panel.
 
 https://marketplace.visualstudio.com/items?itemName=TzachOvadia.todo-list
 
-![Usage Example](images/usage.gif)
+![Usage Example](images/insert-command.gif)
 
 ## Table of Contents
 - [Features](#Features)
@@ -86,17 +86,29 @@ Common tags/types:
 
   Default: ```true```
 
+  **Include**
+
+  Glob pattern to include in scans.
+
+  Default: ```**/*.{ts,js,php,css,scss}```
+
 - **Exclude**
 
   Glob pattern to exclude from scans.
 
-  Default: ```{**/node_modules/**,**/bower_components/**,**/dist/**,**/build/**,**/.vscode/**,**/_output/**,**/*.min.*,**/*.map}```
+  Default: ```{**/node_modules/**,**/bower_components/**,**/dist/**,**/build/**,**/.vscode/**,**/_output/**,**/vendor/**,**/*.min.*,**/*.map}```
 
 - **Name**
 
   Name to use as `Created by`.
 
   Default: `empty`
+
+  **Action Types**
+
+  Comma-separated action types to select from when inserting a new comment.
+
+  Default: `TODO,FIXME,HACK,BUG,UNDONE`
 
 - **Enable Comment Formatting**
 
@@ -115,4 +127,4 @@ Common tags/types:
   List ID to create cards in (will be automatically set on first use)
 
 ## Supported Languages
-This extension currently supports `Javascript` and `Typescript`. We'll add support for other languages in the near future.
+This extension currently supports `Javascript`, `Typescript`, `PHP`, `CSS/SCSS`.

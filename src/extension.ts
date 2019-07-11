@@ -82,7 +82,7 @@ function getConfig() {
         scheme: appScheme,
         enableCommentFormatting: configuration.get('enableCommentFormatting'),
         enableTelemetry: configuration.get('enableTelemetry', null),
-        actionTypes: configuration.get<string>('actionTypes').toUpperCase().split(',')
+        actionTypes: configuration.get<string>('actionTypes').toUpperCase().trim().split(',')
     };
 
     return config;

@@ -4,14 +4,7 @@ import { existsSync } from 'fs';
 
 import { ActionCommentCollection } from '../models/action-comment-collection';
 import { ActionComment } from '../models/action-comment';
-
-const tooltips = {
-    'TODO': `Something to be done`,
-    'FIXME': `Should be corrected.`,
-    'HACK': `A workaround.`,
-    'BUG': `A known bug that should be corrected.`,
-    'UNDONE': `A reversal or "roll back" of previous code.`
-};
+import { tooltips } from '../consts';
 
 export function createTree(comments: ActionCommentCollection) {
     const actions: ActionCommentCollection = {};

@@ -255,7 +255,7 @@
         },
         "exclude": {
           "type": "string",
-          "default": "{**/node_modules/**,**/bower_components/**,**/dist/**,**/build/**,**/.vscode/**,**/_output/**,**/*.min.*,**/*.map}",
+          "default": "{**/node_modules/**,**/bower_components/**,**/dist/**,**/build/**,**/.vscode/**,**/_output/**,**/vendor/**,**/*.min.*,**/*.map}",
           "description": "Glob pattern to exclude from scans"
         },
         "name": {

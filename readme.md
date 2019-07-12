@@ -54,15 +54,19 @@ Press `Ctrl` + `Shift` + `T` to insert a comment in current cursor position.
 ## Supported Comments
 TODO List supports any comment written in the next formats:
 ```
-// <ACTION>: <message>
+// <ACTION>(NAME*): <message>
 /* <ACTION>: <message> */
-// <ACTION>(NAME): <message>
+<!-- <ACTION>(NAME*): <message> -->
 ```
+
+*Name is optional
+
 Examples:
 ```
 // TODO: Refactor everything
 /* FIXME: Please please please */
-// HACK(tzach): This is a workaround
+// HACK(john): This is a workaround
+<!-- TODO(john): A comment in HTML file -->
 ```
 
 Common tags/types:
@@ -78,7 +82,7 @@ Common tags/types:
 
   RegExp to use for extracting comments (first group must be type, last must be text). We recommend capturing only all-uppercase types to avoid capturing `tslint:` and commented properties.
 
-  Default: ```(?:\/\/|\/\*)[ ]?([A-Z]+)(?:\:|\(([A-Za-z\/\d ]+)\)\:)[ ]?(.*)```
+  Default: ```(?:\/\/|\/\*|\<\!--)[ ]?([A-Z]+)(?:\:|\(([A-Za-z\/\d ]+)\)\:)[ ]?(.*?)[ ]?(?:--\>|\*\/|$)```
 
 - **Scan On Save**
 

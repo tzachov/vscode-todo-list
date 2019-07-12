@@ -73,7 +73,7 @@ function getConfig() {
     const configuration = vscode.workspace.getConfiguration();
     
     const config: Config = {
-        expression: new RegExp(configuration.get('expression'), 'g'),
+        expression: new RegExp(configuration.get('expression'), 'gm'),
         exclude: configuration.get('exclude'),
         include: configuration.get('include'),
         scanOnSave: configuration.get('scanOnSave'),

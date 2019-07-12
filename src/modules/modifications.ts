@@ -10,6 +10,7 @@ import { insertComment } from '../functions/insert-comment';
 import { TrackFeature } from './telemetry';
 import { registerCommand } from '../functions/register-command';
 import { tooltips } from '../consts';
+import { getDocumentType } from '../functions/get-document-type';
 
 export class Modifications {
 
@@ -31,7 +32,9 @@ export class Modifications {
             return;
         }
 
-        const newComment = generateComment(item);
+        const docType = getDocumentType(item.uri.fsPath);
+
+        const newComment = generateComment(item, docType);
         editComment(item, newComment);
     }
 
@@ -56,7 +59,8 @@ export class Modifications {
 
     @TrackFeature('Copy')
     private async copyCommentCommand(item: ActionComment) {
-        const text = generateComment(item);
+        const docType = getDocumentType(item.uri.fsPath);
+        const text = generateComment(item, docType);
         await clipboardy.write(text);
     }
 

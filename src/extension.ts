@@ -1,7 +1,7 @@
 'use strict';
 import * as vscode from 'vscode';
 
-import { Config, TrelloConfig } from './config';
+import { Config, TrelloConfig, GitHubConfig } from './config';
 import { registerTreeViewProvider } from './functions/register-tree';
 import { TodoUriHandler } from './modules/uri-handler';
 import { Trello } from './modules/trello';
@@ -9,6 +9,7 @@ import { Modifications } from './modules/modifications';
 import { Deocrator } from './modules/decorator';
 import { Gmail } from './modules/gmail';
 import { Telemetry } from './modules/telemetry';
+import { GitHub } from './modules/github';
 import { CodeActions } from './modules/code-actions';
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -25,6 +26,7 @@ export async function activate(context: vscode.ExtensionContext) {
         const decorator = new Deocrator(context, config);
         const gmail = new Gmail(context, config);
         const codeActions = new CodeActions(context, config);
+        const gitHub = new GitHub(context, config);
 
         context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
             config = getConfig();
@@ -45,6 +47,9 @@ export async function activate(context: vscode.ExtensionContext) {
             }
             if (e.affectsConfiguration('include') || e.affectsConfiguration('exclude')) {
                 tree.updateConfiguration(config);
+            }
+            if (e.affectsConfiguration('github')) {
+                gitHub.updateConfiguration(config);
             }
         }));
     } catch (e) {
@@ -71,7 +76,7 @@ async function setupTelemetry(config: Config) {
 function getConfig() {
     const appScheme = vscode.version.indexOf('insider') > -1 ? 'vscode-insiders' : 'vscode'
     const configuration = vscode.workspace.getConfiguration();
-    
+
     const config: Config = {
         expression: new RegExp(configuration.get('expression'), 'g'),
         exclude: configuration.get('exclude'),
@@ -82,7 +87,8 @@ function getConfig() {
         scheme: appScheme,
         enableCommentFormatting: configuration.get('enableCommentFormatting'),
         enableTelemetry: configuration.get('enableTelemetry', null),
-        actionTypes: configuration.get<string>('actionTypes').toUpperCase().trim().split(',')
+        actionTypes: configuration.get<string>('actionTypes').toUpperCase().trim().split(','),
+        github: configuration.get<GitHubConfig>('github')
     };
 
     return config;

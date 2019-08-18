@@ -5,6 +5,7 @@ export interface Config {
     scanOnSave: boolean;
     name?: string;
     trello: TrelloConfig;
+    github: GitHubConfig;
     scheme: 'vscode' | 'vscode-insiders';
     enableCommentFormatting: boolean;
     enableTelemetry: boolean;
@@ -14,4 +15,9 @@ export interface Config {
 export interface TrelloConfig {
     token?: string;
     defaultList?: string;
+}
+
+export interface GitHubConfig {
+    auth?: string;
+    storeCredentials?: boolean;
 }

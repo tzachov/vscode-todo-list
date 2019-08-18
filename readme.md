@@ -1,7 +1,7 @@
 # TODO List
 
 List all of your TODO-type comments in an easy-to-read tree view panel.
-`Syntax Highlighting` and `Trello Integration` included.
+`Syntax Highlighting`, `Trello`/`Gmail`/`GitHub` `Integration` included.
 
 
 https://marketplace.visualstudio.com/items?itemName=TzachOvadia.todo-list
@@ -50,6 +50,12 @@ Press `Ctrl` + `Shift` + `T` to insert a comment in current cursor position.
 
 #### Usage
 - Right-Click a comment in `Action Comments` list -> `Send using Gmail`.
+
+### **GitHub Integration** - Open GitHub issue directly from your IDE
+
+#### Usage
+- Right-Click a comment in `Action Comments` list -> `Open GitHub Issue`.
+- Enter your GitHub username and password.
 
 ## Supported Comments
 TODO List supports any comment written in the next formats:

@@ -1,7 +1,7 @@
 {
   "name": "todo-list",
   "displayName": "TODO List",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "List all action comments (TODO, FIXME, HACK etc) in an easy-to-read list",
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
@@ -256,7 +256,7 @@
       "properties": {
         "expression": {
           "type": "string",
-          "default": "(?:\\/\\/|\\/\\*|\\<\\!--)[ ]?([A-Z]+)(?:\\:|\\(([A-Za-z\\/\\d ]+)\\)\\:)[ ]?(.*?)[ ]?(?:--\\>|\\*\\/|$)",
+          "default": "(?:\\/\\/|\\/\\*|\\<\\!--)[ ]?([A-Z]+)(?: |\\:|\\(([A-Za-z\\/\\d ]+)\\)\\:)[ ]?(.*?)[ ]?(?:--\\>|\\*\\/|$)",
           "markdownDescription": "RegExp to use for extracting comments (first group must be type, last must be text)\nWe recommend capturing only all-uppercase types to avoid capturing `tslint:` and commented properties"
         },
         "scanOnSave": {

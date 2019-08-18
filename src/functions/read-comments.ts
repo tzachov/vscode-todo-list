@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { readFileSync } from 'fs';
 
-import { ActionCommentCollection } from "../models/action-comment-collection";
+import { ActionCommentCollection } from '../models/action-comment-collection';
 import { ActionComment } from '../models/action-comment';
 import { Config } from '../config';
 

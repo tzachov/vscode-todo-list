@@ -1,12 +1,16 @@
 import * as vscode from 'vscode';
 import { ActionComment } from '../models/action-comment';
 import { generateComment } from './generate-comment';
+import { getDocumentType } from './get-document-type';
 
 export async function insertComment(item: ActionComment) {
-    let value = generateComment(item);
     const editor = await vscode.window.activeTextEditor;
     const startPosition = editor.selection.start;
     const beforeContent = editor.document.getText(new vscode.Range(startPosition.with(startPosition.line, 0), startPosition));
+
+    const docType = getDocumentType(editor.document.uri.fsPath);
+
+    let value = generateComment(item, docType);
     if (beforeContent.trim() !== '') {
         // Add whitespace if inline
         value = ' ' + value;

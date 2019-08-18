@@ -100,7 +100,7 @@ Common tags/types:
 
   Glob pattern to include in scans.
 
-  Default: ```**/*.{ts,js,php,css,scss}```
+  Default: ```**/*.{ts,js,php,css,scss,html}```
 
 - **Exclude**
 
@@ -137,4 +137,4 @@ Common tags/types:
   List ID to create cards in (will be automatically set on first use)
 
 ## Supported Languages
-This extension currently supports `Javascript`, `Typescript`, `PHP`, `CSS/SCSS`.
+This extension currently supports `Javascript`, `Typescript`, `PHP`, `CSS/SCSS` and `HTML`.

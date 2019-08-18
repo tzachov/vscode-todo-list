@@ -43,7 +43,7 @@ export async function activate(context: vscode.ExtensionContext) {
             if (e.affectsConfiguration('expression')) {
                 codeActions.updateConfiguration(config);
             }
-            if (e.affectsConfiguration('include') || e.affectsConfiguration('exclude')) {
+            if (e.affectsConfiguration('expression') || e.affectsConfiguration('include') || e.affectsConfiguration('exclude')) {
                 tree.updateConfiguration(config);
             }
         }));

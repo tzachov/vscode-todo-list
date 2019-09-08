@@ -27,7 +27,7 @@ https://marketplace.visualstudio.com/items?itemName=TzachOvadia.todo-list
 `Right-Click` a comment in `Action Comments` -> Remove/Copy/Edit
 
 ### Insert comment quickly
-Press `Ctrl` + `Shift` + `T` to insert a comment in current cursor position.
+Press `Ctrl`/`CMD` + `Shift` + `A` to insert a comment in current cursor position.
 
 ### Comment formatting
 

@@ -1,7 +1,7 @@
 {
   "name": "todo-list",
   "displayName": "TODO List",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "List all action comments (TODO, FIXME, HACK etc) in an easy-to-read list",
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
@@ -239,8 +239,9 @@
     "keybindings": [
       {
         "command": "extension.insertComment",
-        "key": "ctrl+shift+t",
-        "mac": "cmd+shift+t"
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "textInputFocus && !editorReadonly"
       }
     ],
     "views": {

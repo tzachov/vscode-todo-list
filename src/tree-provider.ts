@@ -57,7 +57,7 @@ export class ActionCommentTreeViewProvider implements vscode.TreeDataProvider<Ac
     async refresh(emitChange?: boolean, file?: vscode.Uri) {
         try {
             if (file) {
-                const fileComments = readCommentsInFile(this.config.expression, file);
+                const fileComments = await readCommentsInFile(this.config.expression, file);
                 const key = vscode.workspace.asRelativePath(file, true);
                 if (!!fileComments) {
                     this.comments[key] = fileComments;

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { readFileSync } from 'fs';
+import { promises } from 'fs';
 
 import { ActionCommentCollection } from '../models/action-comment-collection';
 import { ActionComment } from '../models/action-comment';
@@ -7,24 +7,35 @@ import { Config } from '../config';
 
 export async function readComments(config: Config): Promise<ActionCommentCollection> {
     try {
-        const result: ActionCommentCollection = {};
         const files = await vscode.workspace.findFiles(config.include, config.exclude);
-        files.forEach(file => {
-            const key = vscode.workspace.asRelativePath(file, true);
-            const comments = readCommentsInFile(config.expression, file);
-            if (!!comments) {
-                result[key] = comments;
-            }
-        });
-
+        const result: ActionCommentCollection = await createObject(config.expression, files);
         return Promise.resolve(result);
     } catch (err) {
         return Promise.reject(err);
     }
 }
 
-export function readCommentsInFile(expression: RegExp, file: vscode.Uri) {
-    const fileContent = readFileSync(file.fsPath, 'utf8');
+async function createObject(expression: RegExp, files: Array<vscode.Uri>): Promise<ActionCommentCollection> {
+    const result: ActionCommentCollection = {};
+    for (const file of files) {
+        const key = vscode.workspace.asRelativePath(file, true);
+        const comments = await readCommentsInFile(expression, file);
+        if (!!comments) {
+            result[key] = comments;
+        }
+    }
+
+    return result;
+}
+
+export async function readCommentsInFile(expression: RegExp, file: vscode.Uri) {
+    let fileContent: string;
+    try {
+        fileContent = await promises.readFile(file.fsPath, 'utf8');
+    } catch (e) {
+        console.warn(`readCommentsInFile() readFile failed (${file.fsPath})`, e);
+        return null;
+    }
     const hasBOM = /^\uFEFF/.test(fileContent);
 
     let res: RegExpExecArray;

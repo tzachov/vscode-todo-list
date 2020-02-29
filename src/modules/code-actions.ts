@@ -7,16 +7,38 @@ import { parseComment } from '../functions/read-comments';
 
 export class CodeActions {
 
-    constructor(context: vscode.ExtensionContext, private config: Config) {
+    private providers: Array<vscode.Disposable> = [];
+
+    constructor(private context: vscode.ExtensionContext, private config: Config) {
         registerCommand(context, 'extension.contextMenu', this.contextMenuHandler.bind(this));
 
-        const fixProvider = this.createCodeActionProvider();
-        context.subscriptions.push(vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: 'typescript' }, fixProvider));
-        context.subscriptions.push(vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: 'javascript' }, fixProvider));
+        if (config.enabledCodeActions) {
+            this.setupCodeActions();
+        }
     }
 
     updateConfiguration(config: Config) {
         this.config = config;
+        if (config.enabledCodeActions) {
+            this.setupCodeActions();
+        } else {
+            this.disableCodeActions();
+        }
+    }
+
+    private setupCodeActions() {
+        if (this.providers.length > 0) {
+            return;
+        }
+        const fixProvider = this.createCodeActionProvider();
+        this.providers.push(vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: 'typescript' }, fixProvider));
+        this.providers.push(vscode.languages.registerCodeActionsProvider({ scheme: 'file', language: 'javascript' }, fixProvider));
+        this.context.subscriptions.push(...this.providers);
+    }
+
+    private disableCodeActions() {
+        this.providers.forEach(p => p.dispose());
+        this.providers = [];
     }
 
     private createCodeActionProvider() {

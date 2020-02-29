@@ -42,7 +42,7 @@ export async function activate(context: vscode.ExtensionContext) {
             if (e.affectsConfiguration('enableTelemetry')) {
                 Telemetry.updateConfiguration(config);
             }
-            if (e.affectsConfiguration('expression')) {
+            if (e.affectsConfiguration('expression') || e.affectsConfiguration('enabledCodeActions')) {
                 codeActions.updateConfiguration(config);
             }
             if (e.affectsConfiguration('expression') || e.affectsConfiguration('include') || e.affectsConfiguration('exclude')) {
@@ -88,7 +88,8 @@ function getConfig() {
         enableCommentFormatting: configuration.get('enableCommentFormatting'),
         enableTelemetry: configuration.get('enableTelemetry', null),
         actionTypes: configuration.get<string>('actionTypes').toUpperCase().trim().split(','),
-        github: configuration.get<GitHubConfig>('github')
+        github: configuration.get<GitHubConfig>('github'),
+        enabledCodeActions: configuration.get<boolean>('enabledCodeActions')
     };
 
     return config;

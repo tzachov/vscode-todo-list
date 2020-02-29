@@ -10,6 +10,7 @@ export interface Config {
     enableCommentFormatting: boolean;
     enableTelemetry: boolean;
     actionTypes: Array<string>;
+    enabledCodeActions: boolean;
 }
 
 export interface TrelloConfig {
